@@ -4,15 +4,22 @@ import ProjectList from './components/ProjectList';
 import ProjectAdd from './components/ProjectAdd';
 import ProjectEdit from './components/ProjectEdit';
 
+import StoryList from './components/StoryList';
+import StoryAdd from './components/StoryAdd';
+import StoryEdit from './components/StoryEdit';
 
 function App() {
   return (
     <>
     <Router>
       <Routes>
-        <Route path="/" element={<ProjectList />} />
-        <Route path="/add" element={<ProjectAdd />} />
-        <Route path="/edit/:id" element={<ProjectEdit />} />
+        <Route path="/projects" element={<ProjectList />} />
+        <Route path="/addProject" element={<ProjectAdd />} />
+        <Route path="/editProject/:id" element={<ProjectEdit />} />
+
+        <Route path="/stories" element={<StoryList />} />
+        <Route path="/addStory" element={<StoryAdd />} />
+        <Route path="/editStory/:id" element={<StoryEdit />} />
       </Routes>
     </Router>
 

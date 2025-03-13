@@ -7,12 +7,18 @@ function ProjectEdit() {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const project = ProjectApi.getProjects().find(p => p.id === parseInt(id!))
+    const project = ProjectApi.getProjectById(parseInt(id!))
 
     function editProject() {
 
         const newName = document.querySelector('#name') as HTMLInputElement
         const newDesc = document.querySelector('#desc') as HTMLTextAreaElement
+
+        if (!newName.value || !newDesc.value) {
+            alert('Please fill in all fields')
+            return
+            
+        }
 
         const newProject: Project = {
             id: project!.id,
@@ -21,7 +27,7 @@ function ProjectEdit() {
         }
 
         ProjectApi.editProject(newProject)
-        navigate('/')
+        navigate('/projects')
     }
 
     

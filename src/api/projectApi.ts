@@ -4,6 +4,18 @@ export type Project = {
     desc: string
 }
 
+
+export type Story = {
+    id: number
+    name: string
+    desc: string
+    priority: "low" | "medium" | "high"
+    project_id: number
+    date: string
+    status: 'todo' | 'doing' | 'done'
+    owner: number
+}
+
 class ProjectApi {
 
     static getProjects(): Project[] {
@@ -36,6 +48,76 @@ class ProjectApi {
         projects[index] = project
         localStorage.setItem('projects', JSON.stringify(projects))
         console.log("Project with id " + project.id + " was edited successfully")
+    }
+
+    static getProjectById(id: number): Project {
+        const projects: Project[] = this.getProjects()
+        return projects.find(p => p.id === id)!
+    }
+
+    static setActiveProject(id: number): void {
+        localStorage.setItem('activeProject', id.toString())
+        console.log("Project with id " + id + " was set as active")
+    }
+
+    static getActiveProject(): Project | null {
+        const id: string | null = localStorage.getItem('activeProject')
+        if (id) {
+            const projects: Project[] = this.getProjects()
+            return projects.find(p => p.id === parseInt(id))!
+        }
+        return null
+    }
+
+    static unactiveProject(): void {
+        localStorage.removeItem('activeProject')
+        console.log("Active project was removed")
+    }
+
+    static getStories(): Story[] {
+        const stories: string | null = localStorage.getItem('stories')
+        return stories ? JSON.parse(stories) : [] as Story[]
+    }
+
+    static addStory(story: Story): void {
+        const stories: Story[] = this.getStories()
+        if (stories.find(s => s.name === story.name)) {
+            alert("Story with name " + story.name + " already exists")
+            return
+        }
+        stories.push(story)
+        localStorage.setItem('stories', JSON.stringify(stories))
+        console.log("Story added, id: " + story.id + ", name: " + story.name + ", desc: " + story.desc)
+    }
+
+    static deleteStory(id: number): void {
+        let stories: Story[] = this.getStories()
+        stories = stories.filter(s => s.id !== id)
+        localStorage.setItem('stories', JSON.stringify(stories))
+        console.log("Story with id " + id + " was deleted successfully")
+    }
+
+    static editStory(story: Story): void {
+        const stories: Story[] = this.getStories()
+        const index = stories.findIndex(s => s.id === story.id)
+        stories[index] = story
+        localStorage.setItem('stories', JSON.stringify(stories))
+        console.log("Story with id " + story.id + " was edited successfully")
+    }
+
+    static getStoryById(id: number): Story {
+        const stories: Story[] = this.getStories()
+        return stories.find(s => s.id === id)!
+    }
+
+    static getStoriesByProjectId(project_id: number): Story[] {
+        const stories: Story[] = this.getStories()
+        return stories.filter(s => s.project_id === project_id)
+    }
+
+    static getStoriesByProjectIdAndStatus(project_id: number, status: 'todo' | 'doing' | 'done'): Story[] {
+        const stories: Story[] = this.getStoriesByProjectId(project_id)
+        return stories.filter(s => s.status === status)
     }
 }
 

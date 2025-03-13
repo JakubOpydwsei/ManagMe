@@ -8,6 +8,11 @@ function ProjectAdd() {
         const name = document.querySelector('#name') as HTMLInputElement
         const desc = document.querySelector('#desc') as HTMLTextAreaElement
 
+        if (!name.value || !desc.value) {
+            alert('Please fill in all fields')
+            return
+        }
+
         const project: Project = {
             id: Date.now(),
             name: name.value,
@@ -15,7 +20,7 @@ function ProjectAdd() {
         }
 
         ProjectApi.addProject(project)
-        navigate('/')
+        navigate('/projects')
     }
 
     return (
