@@ -4,10 +4,11 @@ import ProjectApi, { Project } from '../api/projectApi'
 
 function ProjectEdit() {
 
-    const { id } = useParams()
+    const { projectId } = useParams()
     const navigate = useNavigate()
 
-    const project = ProjectApi.getProjectById(parseInt(id!))
+    const project = ProjectApi.getProjectById(parseInt(projectId!))
+    console.log(project)
 
     function editProject() {
 

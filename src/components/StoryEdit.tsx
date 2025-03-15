@@ -4,10 +4,10 @@ import ProjectApi, { Story } from '../api/projectApi'
 
 function StoryEdit() {
 
-    const { id } = useParams()
+    const { storyId } = useParams()
     const navigate = useNavigate()
 
-    const story = ProjectApi.getStoryById(parseInt(id!))
+    const story = ProjectApi.getStoryById(parseInt(storyId!))
 
     function editStory(): void {
 
@@ -56,7 +56,7 @@ function StoryEdit() {
             <option value="doing">doing</option>
             <option value="done">done</option>
         </select>
-        <button className='mt-3' onClick={editStory}>Add story</button></div></>);
+        <button className='mt-3' onClick={editStory}>Edit story</button></div></>);
 }
 
 export default StoryEdit;

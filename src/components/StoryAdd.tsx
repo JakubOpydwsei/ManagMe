@@ -8,7 +8,7 @@ function StoryAdd() {
     const navigate = useNavigate()
 
     const auth = new Auth()
-    const user = auth.GetUser()
+    const user = auth.GetActiveUser()
     const activeProject = ProjectApi.getActiveProject()
 
     function addStory() {
@@ -29,7 +29,7 @@ function StoryAdd() {
             desc: desc.value,
             priority: priority.value as "low" | "medium" | "high",
             project_id: activeProject!.id,
-            date: new Date().toLocaleString(),
+            date: new Date().toISOString(),
             status: status.value as 'todo' | 'doing' | 'done',
             owner: user.id
         }

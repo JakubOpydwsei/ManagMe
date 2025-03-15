@@ -8,18 +8,29 @@ import StoryList from './components/StoryList';
 import StoryAdd from './components/StoryAdd';
 import StoryEdit from './components/StoryEdit';
 
+import TaskAdd from './components/TaskAdd';
+import TaskList from './components/TaskList';
+import TaskEdit from './components/TaskEdit';
+
 function App() {
   return (
     <>
     <Router>
       <Routes>
+        {/* Projects */}
         <Route path="/projects" element={<ProjectList />} />
-        <Route path="/addProject" element={<ProjectAdd />} />
-        <Route path="/editProject/:id" element={<ProjectEdit />} />
+        <Route path="/project/add" element={<ProjectAdd />} />
+        <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
 
+        {/* Stories */}
         <Route path="/stories" element={<StoryList />} />
-        <Route path="/addStory" element={<StoryAdd />} />
-        <Route path="/editStory/:id" element={<StoryEdit />} />
+        <Route path="/story/add" element={<StoryAdd />} />
+        <Route path="/story/edit/:storyId" element={<StoryEdit />} />
+
+        {/* Tasks */}
+        <Route path="/story/:storyId/tasks" element={<TaskList />} />
+        <Route path="/story/:storyId/task/add" element={<TaskAdd />} />
+        <Route path="/story/:storyId/task/edit/:taskId" element={<TaskEdit />} />
       </Routes>
     </Router>
 

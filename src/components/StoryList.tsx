@@ -7,7 +7,7 @@ function StoryList() {
 
     const navigate = useNavigate()
     const auth = new Auth()
-    const user = auth.GetUser()
+    const user = auth.GetActiveUser()
     const activeProject = ProjectApi.getActiveProject()
 
     const [stories, setStories] = useState(ProjectApi.getStoriesByProjectId(activeProject!.id))
@@ -23,7 +23,7 @@ function StoryList() {
 
     function deleteStory(id: number): void {
         ProjectApi.deleteStory(id)
-        return setStories(ProjectApi.getStories())
+        return setStories(ProjectApi.getStoriesByProjectId(activeProject!.id))
     }
 
     function filter() {
@@ -42,6 +42,7 @@ function StoryList() {
                 <div>
                     <p className='mb-4 text-3xl'>Active project: {activeProject.name}</p>
                     <button onClick={() => unactiveProject()}>Change active project !</button>
+                    <Link to={`/story/add`}><button>Add Story</button></Link>
                     <hr />
                     <p className='mb-4 text-3xl'>Stories</p>
                     <label htmlFor="name">Status:</label>
@@ -61,7 +62,8 @@ function StoryList() {
                                 <p className="mb-2">Status: {s.status}</p>
                                 <p className="mb-2">Owner's ID: {s.owner}</p>
                                 <button onClick={() => deleteStory(s.id)}>Delete</button>
-                                <button><Link to={`/editStory/${s.id}`}>✏️ Edit</Link></button>
+                                <Link to={`/story/edit/${s.id}`}><button>Edit</button></Link>
+                               <Link to={`/story/${s.id}/tasks`}> <button>Tasks</button></Link>
                             </li>
                         ))}
                     </ul>

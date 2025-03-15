@@ -12,8 +12,25 @@ export type Story = {
     priority: "low" | "medium" | "high"
     project_id: number
     date: string
-    status: 'todo' | 'doing' | 'done'
+    status: "todo" | "doing" | "done"
     owner: number
+}
+
+export type Task ={
+    id: number
+    name: string
+    desc: string
+    priority: "low" | "medium" | "high"
+    storyId: number
+    workingHours: number
+
+    status: "todo" | "doing" | "done"
+    user?: number //?
+    startDate?: string //?
+    endDate?: string //?
+
+    addDate: string
+
 }
 
 class ProjectApi {
@@ -118,6 +135,45 @@ class ProjectApi {
     static getStoriesByProjectIdAndStatus(project_id: number, status: 'todo' | 'doing' | 'done'): Story[] {
         const stories: Story[] = this.getStoriesByProjectId(project_id)
         return stories.filter(s => s.status === status)
+    }
+
+    static getTasks(): Task[] {
+        const tasks: string | null = localStorage.getItem('tasks')
+        return tasks ? JSON.parse(tasks) : [] as Task[]
+    }
+
+    static addTask(task: Task): void {
+        const tasks: Task[] = this.getTasks()
+        if (tasks.find(t => t.name === task.name)) {
+            alert("Task with name " + task.name + " already exists")
+            return
+        }
+        tasks.push(task)
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+    static getTaskById(taskId: number): Task {
+        const tasks: Task[] = this.getTasks() as Task[]
+        return tasks.find(t => t.id === taskId)!
+    }
+
+    static getTasksByStoryId(storyId: number): Task[] {
+        const tasks: Task[] = this.getTasks()
+        return tasks.filter(t => t.storyId === storyId)
+    }
+
+    static deleteTask(name: string): void {
+        let tasks: Task[] = this.getTasks()
+        tasks = tasks.filter(t => t.name !== name)
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+        console.log("Task with name " + name + " was deleted successfully")
+    }
+
+    static editTask(task: Task): void {
+        const tasks: Task[] = this.getTasks()
+        const index = tasks.findIndex(t => t.id === task.id)
+        tasks[index] = task
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+        console.log("Task with name " + task.id + " was edited successfully")
     }
 }
 

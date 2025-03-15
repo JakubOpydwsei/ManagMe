@@ -8,7 +8,7 @@ function ProjectList() {
     const navigate = useNavigate()
 
     const auth = new Auth()
-    const user = auth.GetUser()
+    const user = auth.GetActiveUser()
 
     const activeProject = ProjectApi.getActiveProject()
 
@@ -45,7 +45,7 @@ function ProjectList() {
                     <p className="text-2xl">{p.name}</p>
                     <p className="mb-2">{p.desc}</p>
                     <button onClick={() => deleteProject(p.id)}>Delete</button>
-                    <button><Link to={`/editProject/${p.id}`}>✏️ Edit</Link></button>
+                    <Link to={`/project/edit/${p.id}`}><button>Edit</button></Link>
                     <button onClick={() => setActiveProject(p.id)}>Set as active</button>
                 </li>
                 ))}
