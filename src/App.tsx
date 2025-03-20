@@ -12,6 +12,8 @@ import TaskAdd from './components/TaskAdd';
 import TaskList from './components/TaskList';
 import TaskEdit from './components/TaskEdit';
 
+import Kanban from './components/Kanban';
+
 function App() {
   return (
     <>
@@ -31,6 +33,9 @@ function App() {
         <Route path="/story/:storyId/tasks" element={<TaskList />} />
         <Route path="/story/:storyId/task/add" element={<TaskAdd />} />
         <Route path="/story/:storyId/task/edit/:taskId" element={<TaskEdit />} />
+
+        {/* Kanban */}
+        <Route path="/story/:storyId/kanban" element={<Kanban />} />
       </Routes>
     </Router>
 

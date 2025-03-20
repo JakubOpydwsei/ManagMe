@@ -10,11 +10,11 @@ function TaskAdd() {
     const navigate = useNavigate()
 
     function addTask() {
-        const name = (document.getElementById("name") as HTMLInputElement).value
-        const desc = (document.getElementById("desc") as HTMLInputElement).value
-        const priority = (document.getElementById("priority") as HTMLSelectElement).value as "low" | "medium" | "high"
-        const workingHours = (document.getElementById("workingHours") as HTMLInputElement).value
-        const userId = (document.getElementById("user") as HTMLSelectElement).value
+        const name = (document.querySelector("#name") as HTMLInputElement).value
+        const desc = (document.querySelector("#desc") as HTMLInputElement).value
+        const priority = (document.querySelector("#priority") as HTMLSelectElement).value as "low" | "medium" | "high"
+        const workingHours = (document.querySelector("#workingHours") as HTMLInputElement).value
+        const userId = (document.querySelector("#user") as HTMLSelectElement).value
         const Id = parseInt(storyId)
 
         // if (!name || !desc || !priority || !workingHours) {
