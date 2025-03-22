@@ -4,7 +4,6 @@ export type Project = {
     desc: string
 }
 
-
 export type Story = {
     id: number
     name: string
@@ -16,22 +15,27 @@ export type Story = {
     owner: number
 }
 
-export type Task ={
+export type BasicTask = {
     id: number
     name: string
     desc: string
     priority: "low" | "medium" | "high"
     storyId: number
     workingHours: number
-
     status: "todo" | "doing" | "done"
-    user?: number //?
-    startDate?: string //?
-    endDate?: string //?
-
     addDate: string
-
 }
+
+export type BasicTaskWithUser = BasicTask & {
+    user: number
+    startDate: string
+}
+
+export type CompleteTask = BasicTaskWithUser & {
+    endDate: string
+}
+
+export type Task = BasicTask | BasicTaskWithUser | CompleteTask
 
 class ProjectApi {
 
@@ -151,6 +155,7 @@ class ProjectApi {
         tasks.push(task)
         localStorage.setItem('tasks', JSON.stringify(tasks))
     }
+
     static getTaskById(taskId: number): Task {
         const tasks: Task[] = this.getTasks() as Task[]
         return tasks.find(t => t.id === taskId)!

@@ -12,9 +12,9 @@ function Kanban() {
                 <div className="border-2 border-black p-4 rounded-xl">
                     <p className="text-2xl mb-4 text-center">To do</p>
                     <div className="flex flex-col gap-2">
-                    {tasks.map(task => (
+                        {tasks.map(task => (
                             <>
-                                {task.status === "doing" && (
+                                {task.status === "todo" && (
                                     <div key={task.id} className='border-2 border-black p-4 m-4'>
                                         <p className='text-2xl'>{task.name}</p>
                                         <p className='text-lg'>{task.desc}</p>
@@ -33,7 +33,7 @@ function Kanban() {
                 <div className="border-2 border-black p-4 rounded-xl">
                     <p className="text-2xl mb-4 text-center">Doing</p>
                     <div className="flex flex-col gap-2">
-                    {tasks.map(task => (
+                        {tasks.map(task => (
                             <>
                                 {task.status === "doing" && (
                                     <div key={task.id} className='border-2 border-black p-4 m-4'>
@@ -44,8 +44,8 @@ function Kanban() {
                                         <p className='text-lg'>Status: {task.status}</p>
                                         <p className='text-lg'>Story id: {task.storyId}</p>
                                         <p className='text-lg'>Add date: {task.addDate}</p>
-                                        <p className='text-lg'>Employee: {task.user}</p>
-                                        <p className='text-lg'>Start date: {task.startDate}</p>
+                                        {"user" in task && <p>User: {task.user}</p>}
+                                        {"startDate" in task && <p>Start date: {task.startDate}</p>}
                                     </div>
                                 )}
                             </>
@@ -67,9 +67,9 @@ function Kanban() {
                                         <p className='text-lg'>Status: {task.status}</p>
                                         <p className='text-lg'>Story id: {task.storyId}</p>
                                         <p className='text-lg'>Add date: {task.addDate}</p>
-                                        <p className='text-lg'>Employee: {task.user}</p>
-                                        <p className='text-lg'>Start date: {task.startDate}</p>
-                                        <p className='text-lg'>End date: {task.endDate}</p>
+                                        {"user" in task && <p>User: {task.user}</p>}
+                                        {"startDate" in task && <p>Start date: {task.startDate}</p>}
+                                        {"endDate" in task && <p>End date: {task.endDate}</p>}
                                     </div>
                                 )}
                             </>

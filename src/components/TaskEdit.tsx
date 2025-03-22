@@ -10,7 +10,15 @@ function TaskEdit() {
     let users = new Auth().getUsers()
     users = users.filter(u => u.role !== "admin")
     const navigate = useNavigate()
+    let startDate = new Date().toISOString()
+    let user: string | number = ""
 
+    if ('startDate' in prevTask && prevTask.startDate) {
+        startDate = prevTask.startDate;
+    }
+    if ('user' in prevTask && prevTask.user) {
+        user = prevTask.user;
+    }
 
     function editTask() {
         
@@ -20,10 +28,8 @@ function TaskEdit() {
         const workingHours = (document.querySelector("#workingHours") as HTMLInputElement).value
         const userId = (document.querySelector("#user") as HTMLSelectElement).value
         const Id = parseInt(storyId)
-        let startDate = new Date().toISOString()
-        if(prevTask.startDate){
-            startDate = prevTask.startDate
-        }
+
+        
 
         if (!name || !desc || !priority || !workingHours) {
             alert("Please fill required fields fields")
@@ -85,7 +91,7 @@ function TaskEdit() {
         <input type="number" max={100} min={1} name="workingHours" id="workingHours" className="block" defaultValue={prevTask.workingHours}/>
 
         <label htmlFor="user">Assign user to task:</label>
-        <select name="user" id="user" className="block text-black bg-gray-200" defaultValue={prevTask.user}>
+        <select name="user" id="user" className="block text-black bg-gray-200" defaultValue={user}>
             <option value=""></option>
             {users.map(u => (
                 <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
