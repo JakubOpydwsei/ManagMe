@@ -8,8 +8,8 @@ import StoryListPage from './pages/StoryListPage';
 import StoryAdd from './components/StoryAdd';
 import StoryEdit from './components/StoryEdit';
 
+import TaskListPage from './pages/TaskListPage';
 import TaskAdd from './components/TaskAdd';
-import TaskList from './components/TaskList';
 import TaskEdit from './components/TaskEdit';
 
 import Kanban from './components/Kanban';
@@ -30,7 +30,7 @@ function App() {
         <Route path="/story/edit/:storyId" element={<StoryEdit />} />
 
         {/* Tasks */}
-        <Route path="/story/:storyId/tasks" element={<TaskList />} />
+        <Route path="/story/:storyId/tasks" element={<TaskListPage />} />
         <Route path="/story/:storyId/task/add" element={<TaskAdd />} />
         <Route path="/story/:storyId/task/edit/:taskId" element={<TaskEdit />} />
 
