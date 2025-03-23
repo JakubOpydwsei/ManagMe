@@ -1,6 +1,6 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ProjectList from './components/ProjectList';
+import ProjectListPage from './pages/ProjectListPage';
 import ProjectAdd from './components/ProjectAdd';
 import ProjectEdit from './components/ProjectEdit';
 
@@ -20,7 +20,7 @@ function App() {
     <Router>
       <Routes>
         {/* Projects */}
-        <Route path="/projects" element={<ProjectList />} />
+        <Route path="/projects" element={<ProjectListPage />} />
         <Route path="/project/add" element={<ProjectAdd />} />
         <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
 

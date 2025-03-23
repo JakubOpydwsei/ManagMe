@@ -1,14 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import ProjectApi, { Project } from '../api/projectApi'
 
-
 function ProjectEdit() {
 
     const { projectId } = useParams()
     const navigate = useNavigate()
 
     const project = ProjectApi.getProjectById(parseInt(projectId!))
-    console.log(project)
 
     function editProject() {
 
@@ -18,7 +16,6 @@ function ProjectEdit() {
         if (!newName.value || !newDesc.value) {
             alert('Please fill in all fields')
             return
-            
         }
 
         const newProject: Project = {
@@ -30,8 +27,6 @@ function ProjectEdit() {
         ProjectApi.editProject(newProject)
         navigate('/projects')
     }
-
-    
 
     return (
         <>

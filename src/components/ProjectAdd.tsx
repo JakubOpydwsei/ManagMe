@@ -12,6 +12,7 @@ function ProjectAdd() {
             alert('Please fill in all fields')
             return
         }
+
         const project: Project = {
             id: Date.now(),
             name: name.value,
