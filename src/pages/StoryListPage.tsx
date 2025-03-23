@@ -2,8 +2,8 @@ import ProjectApi from '../api/projectApi'
 import { Link, useNavigate } from 'react-router-dom';
 import { Auth } from "../api/Auth";
 import { useState } from 'react';
-
-function StoryList() {
+import StoryTile from '../components/StoryTile';
+function StoryListPage() {
 
     const navigate = useNavigate()
     const auth = new Auth()
@@ -21,10 +21,7 @@ function StoryList() {
         navigate('/projects')
     }
 
-    function deleteStory(id: number): void {
-        ProjectApi.deleteStory(id)
-        return setStories(ProjectApi.getStoriesByProjectId(activeProject!.id))
-    }
+    
 
     function filter() {
         const status = document.querySelector('#status') as HTMLSelectElement
@@ -54,17 +51,8 @@ function StoryList() {
                     </select>
                     <ul>
                         {stories.map(s => (
-                            <li key={s.id}>
-                                <p className="text-2xl">Name: {s.name}</p>
-                                <p className="mb-2">Description: {s.desc}</p>
-                                <p className="mb-2">Priority: {s.priority}</p>
-                                <p className="mb-2">Date: {s.date}</p>
-                                <p className="mb-2">Status: {s.status}</p>
-                                <p className="mb-2">Owner's ID: {s.owner}</p>
-                                <button onClick={() => deleteStory(s.id)}>Delete</button>
-                                <Link to={`/story/edit/${s.id}`}><button>Edit</button></Link>
-                               <Link to={`/story/${s.id}/tasks`}> <button>Tasks</button></Link>
-                            </li>
+                            <StoryTile key={s.id} story={s} />
+                            
                         ))}
                     </ul>
                 </div>
@@ -75,4 +63,4 @@ function StoryList() {
     );
 }
 
-export default StoryList;
+export default StoryListPage;

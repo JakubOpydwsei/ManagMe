@@ -4,7 +4,7 @@ import ProjectListPage from './pages/ProjectListPage';
 import ProjectAdd from './components/ProjectAdd';
 import ProjectEdit from './components/ProjectEdit';
 
-import StoryList from './components/StoryList';
+import StoryListPage from './pages/StoryListPage';
 import StoryAdd from './components/StoryAdd';
 import StoryEdit from './components/StoryEdit';
 
@@ -25,7 +25,7 @@ function App() {
         <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
 
         {/* Stories */}
-        <Route path="/stories" element={<StoryList />} />
+        <Route path="/stories" element={<StoryListPage />} />
         <Route path="/story/add" element={<StoryAdd />} />
         <Route path="/story/edit/:storyId" element={<StoryEdit />} />
 
