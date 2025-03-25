@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ProjectApi, { Project } from '../api/projectApi'
 
 function ProjectEdit() {
-    const [name, setName] = useState('')
-    const [desc, setDesc] = useState('')
-
     const { projectId } = useParams()
+    const project = ProjectApi.getProjectById(parseInt(projectId!))
+    
+    const [name, setName] = useState(project.name)
+    const [desc, setDesc] = useState(project.desc)
     const navigate = useNavigate()
 
-    const project = ProjectApi.getProjectById(parseInt(projectId!))
 
     function editProject() {
 
@@ -34,10 +34,10 @@ function ProjectEdit() {
         <>
             <p className='mb-4 text-3xl'>Edit project</p>
             <label htmlFor="name">Name:</label>
-            <input defaultValue={project!.name} type="text" name="name" id="name" className='block' onChange={(e) => setName(e.target.value)} />
+            <input defaultValue={project.name} type="text" name="name" id="name" className='block' required onChange={(e) => setName(e.target.value)} />
             <label htmlFor="desc">Description:</label>
-            <textarea defaultValue={project!.desc} name="desc" id="desc" className='block' onChange={(e) => setDesc(e.target.value)}></textarea>
-            <button onClick={editProject}>Edit</button>
+            <textarea defaultValue={project.desc} name="desc" id="desc" className='block' required onChange={(e) => setDesc(e.target.value)}></textarea>
+            <button type="button" onClick={editProject}>Edit</button>
         </>
     );
 }

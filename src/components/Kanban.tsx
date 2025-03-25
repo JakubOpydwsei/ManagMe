@@ -10,7 +10,7 @@ function Kanban() {
         <>
             <div className="p-6">
                 <Link to={`/story/${storyId}/tasks`}>
-                    <button className="mb-6 px-4 py-2 rounded-xl shadow transition-colors">
+                    <button type="button" className="mb-6 px-4 py-2 rounded-xl shadow transition-colors">
                         View Task List
                     </button>
                 </Link>

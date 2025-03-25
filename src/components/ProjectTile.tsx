@@ -23,9 +23,9 @@ function ProjectTile({ project }: ProjectFormProps) {
         <li key={project.id} className="mb-4">
             <p className="text-2xl">{project.name}</p>
             <p className="mb-2">{project.desc}</p>
-            <button onClick={() => deleteProject(project.id)}>Delete</button>
-            <Link to={`/project/edit/${project.id}`}><button>Edit</button></Link>
-            <button onClick={() => setActiveProject(project.id)}>Set as active</button>
+            <button type="button" onClick={() => deleteProject(project.id)}>Delete</button>
+            <Link to={`/project/edit/${project.id}`}><button type="button">Edit</button></Link>
+            <button type="button" onClick={() => setActiveProject(project.id)}>Set as active</button>
         </li>
     );
 }

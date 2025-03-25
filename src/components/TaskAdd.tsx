@@ -66,20 +66,20 @@ function TaskAdd() {
                     <p className="mb-4 text-3xl">Add Task</p>
 
                     <label htmlFor="name">Task"s name:</label>
-                    <input type="text" name="name" id="name" className="block" onChange={(e) => setName(e.target.value)}/>
+                    <input type="text" name="name" id="name" className="block" required onChange={(e) => setName(e.target.value)}/>
                     
                     <label htmlFor="desc">Description:</label>
-                    <textarea name="desc" id="desc" className="block" onChange={(e) => setDesc(e.target.value)}></textarea>
+                    <textarea name="desc" id="desc" className="block" required onChange={(e) => setDesc(e.target.value)}></textarea>
                     
                     <label htmlFor="priority">Priority:</label>
-                    <select name="priority" id="priority" className="block text-black bg-gray-200" onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}>
+                    <select name="priority" id="priority" className="block text-black bg-gray-200" required onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}>
                         <option value="low">low</option>
                         <option value="medium">medium</option>
                         <option value="high">high</option>
                     </select>
 
                     <label htmlFor="workingHours">Hours require to done task:</label>
-                    <input type="number" max={100} min={1} name="workingHours" id="workingHours" className="block" onChange={(e) => setWorkingHours(e.target.value)}/>
+                    <input type="number" max={100} min={1} name="workingHours" id="workingHours" required className="block" onChange={(e) => setWorkingHours(e.target.value)}/>
 
                     <label htmlFor="user">Assign user to task:</label>
                     <select name="user" id="user" className="block text-black bg-gray-200" onChange={(e) => setUserId(e.target.value)}>
@@ -88,7 +88,7 @@ function TaskAdd() {
                             <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
                         ))}
                     </select>
-                    <button className="mt-3" onClick={addTask}>Add Task</button>
+                    <button type="button" className="mt-3" onClick={addTask}>Add Task</button>
                 </div>
     </>);
 }

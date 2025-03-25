@@ -46,22 +46,22 @@ function StoryAdd() {
                 <div>
                     <p className='mb-4 text-3xl'>Add story</p>
                     <label htmlFor="name">Name:</label>
-                    <input type="text" name="name" id="name" className='block' onChange={(e)=>setName(e.target.value)}/>
+                    <input type="text" name="name" id="name" className='block' required onChange={(e)=>setName(e.target.value)}/>
                     <label htmlFor="desc">Description:</label>
-                    <textarea name="desc" id="desc" className='block' onChange={(e)=>setDesc(e.target.value)}></textarea>
+                    <textarea name="desc" id="desc" className='block' required onChange={(e)=>setDesc(e.target.value)}></textarea>
                     <label htmlFor="priority">Priority:</label>
-                    <select name="priority" id="priority" className='block text-black bg-gray-200' onChange={(e)=>setPriority(e.target.value)}>
+                    <select name="priority" id="priority" className='block text-black bg-gray-200' required onChange={(e)=>setPriority(e.target.value)}>
                         <option value="low">low</option>
                         <option value="medium">medium</option>
                         <option value="high">high</option>
                     </select>
                     <label htmlFor="status">Status:</label>
-                    <select name="status" id="status" className='block text-black bg-gray-200' onChange={(e)=>setStatus(e.target.value)}>
+                    <select name="status" id="status" className='block text-black bg-gray-200' required onChange={(e)=>setStatus(e.target.value)}>
                         <option value="todo">todo</option>
                         <option value="doing">doing</option>
                         <option value="done">done</option>
                     </select>
-                    <button className='mt-3' onClick={addStory}>Add story</button>
+                    <button type="button" className='mt-3' onClick={addStory}>Add story</button>
                 </div>
             ) : (<h1>You have no active project !</h1>)}
         </>

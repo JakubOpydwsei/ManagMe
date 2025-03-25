@@ -30,10 +30,10 @@ function ProjectAdd() {
         <>
             <p className='mb-4 text-3xl'>Add project</p>
             <label htmlFor="name">Name:</label>
-            <input type="text" name="name" id="name" className='block' onChange={(e) => setName(e.target.value)} />
+            <input type="text" name="name" id="name" className='block' required onChange={(e) => setName(e.target.value)} />
             <label htmlFor="desc">Description:</label>
-            <textarea name="desc" id="desc" className='block' onChange={(e) => setDesc(e.target.value)}></textarea>
-            <button className='mt-3' onClick={addProject}>Add project</button>
+            <textarea name="desc" id="desc" className='block' required onChange={(e) => setDesc(e.target.value)}></textarea>
+            <button type="button" className='mt-3' onClick={addProject}>Add project</button>
         </>
     );
 }

@@ -22,9 +22,9 @@ function StoryTile({story}: StoryFormProps) {
             <p className="mb-2">Date: {formatDate(story.date)}</p>
             <p className="mb-2">Status: {story.status}</p>
             <p className="mb-2">Owner's ID: {story.owner}</p>
-            <button onClick={() => deleteStory(story.id)}>Delete</button>
-            <Link to={`/story/edit/${story.id}`}><button>Edit</button></Link>
-            <Link to={`/story/${story.id}/tasks`}> <button>Tasks</button></Link>
+            <button type="button" onClick={() => deleteStory(story.id)}>Delete</button>
+            <Link to={`/story/edit/${story.id}`}><button type="button">Edit</button></Link>
+            <Link to={`/story/${story.id}/tasks`}> <button type="button">Tasks</button></Link>
         </li></>);
 }
 
