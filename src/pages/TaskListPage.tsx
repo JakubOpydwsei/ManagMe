@@ -29,7 +29,7 @@ function TaskListPage() {
         <Link to={`/story/${storyId}/task/add`}><button>Add new Task</button></Link>
         <Link to={`/story/${storyId}/kanban`}><button>Kanban</button></Link>
         {tasks.map((task: Task) => (
-            <div className="py-5">
+            <div className="py-5" key={task.id * 10}>
                 <TaskTile key={task.id} task={task} />
                 <button onClick={() => deleteTask(task.name)}>Delete</button>
                 <Link to={`/story/${task.storyId}/task/edit/${task.id}`}><button>Edit</button></Link>

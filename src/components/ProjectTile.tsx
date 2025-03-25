@@ -1,11 +1,11 @@
-import ProjectApi,{Project} from '../api/projectApi';
+import ProjectApi, { Project } from '../api/projectApi';
 import { Link, useNavigate } from 'react-router-dom';
 
 type ProjectFormProps = {
     project: Project;
 }
 
-function ProjectTile({project}: ProjectFormProps) {
+function ProjectTile({ project }: ProjectFormProps) {
 
     const navigate = useNavigate()
 
@@ -13,10 +13,12 @@ function ProjectTile({project}: ProjectFormProps) {
         ProjectApi.setActiveProject(id)
         navigate('/stories')
     }
+
     function deleteProject(id: number) {
         ProjectApi.deleteProject(id)
         navigate('/projects')
     }
+
     return (
         <li key={project.id} className="mb-4">
             <p className="text-2xl">{project.name}</p>

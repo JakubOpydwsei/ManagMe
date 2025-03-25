@@ -42,12 +42,12 @@ function StoryListPage() {
                     <Link to={`/story/add`}><button>Add Story</button></Link>
                     <hr />
                     <p className='mb-4 text-3xl'>Stories</p>
-                    <label htmlFor="name">Status:</label>
-                    <select name="status" id="status" className='block text-black bg-gray-200' onChange={filter}>
-                        <option value="none">none</option>
-                        <option value="todo">todo</option>
-                        <option value="doing">doing</option>
-                        <option value="done">done</option>
+                    <label htmlFor="name">Filter by status: </label>
+                    <select name="status" id="status" className='text-white border-1 border-white mb-4' onChange={filter}>
+                        <option value="none" className='text-black'>none</option>
+                        <option value="todo" className='text-black'>todo</option>
+                        <option value="doing" className='text-black'>doing</option>
+                        <option value="done" className='text-black'>done</option>
                     </select>
                     <ul>
                         {stories.map(s => (

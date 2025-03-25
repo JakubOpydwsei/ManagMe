@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProjectApi, { Story } from '../api/projectApi'
 
@@ -9,49 +10,52 @@ function StoryEdit() {
 
     const story = ProjectApi.getStoryById(parseInt(storyId!))
 
+    const [name, setName] = useState('')
+    const [desc, setDesc] = useState('')
+    const [priority, setPriority] = useState('')
+    const [status, setStatus] = useState('')
+
     function editStory(): void {
 
-        const name = document.querySelector('#name') as HTMLInputElement
-        const desc = document.querySelector('#desc') as HTMLTextAreaElement
-        const priority = document.querySelector('#priority') as HTMLSelectElement
-        const status = document.querySelector('#status') as HTMLSelectElement
 
-        if (!name.value || !desc.value || !priority.value || !status.value) {
+
+        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== '';
+
+        if (!validateForm) {
             alert('Please fill in all fields')
             return
         }
 
         const newStory: Story = {
             id: story.id,
-            name: name.value,
-            desc: desc.value,
-            priority: priority.value as "low" | "medium" | "high",
+            name: name,
+            desc: desc,
+            priority: priority as "low" | "medium" | "high",
             project_id: story.project_id,
             date: story.date,
-            status: status.value as 'todo' | 'doing' | 'done',
+            status: status as 'todo' | 'doing' | 'done',
             owner: story.owner
         }
 
         ProjectApi.editStory(newStory)
         navigate('/stories')
-        
-        
+
         return;
     }
 
     return (<><div><p className='mb-4 text-3xl'>Add story</p>
         <label htmlFor="name">Name:</label>
-        <input type="text" name="name" id="name" className='block' defaultValue={story.name} />
+        <input type="text" name="name" id="name" className='block' defaultValue={story.name} onChange={(e)=>setName(e.target.value)}/>
         <label htmlFor="desc">Description:</label>
-        <textarea name="desc" id="desc" className='block' defaultValue={story.desc}></textarea>
+        <textarea name="desc" id="desc" className='block' defaultValue={story.desc} onChange={(e)=>setDesc(e.target.value)}></textarea>
         <label htmlFor="priority">Priority:</label>
-        <select name="priority" id="priority" className='block text-black bg-gray-200' defaultValue={story.priority}>
+        <select name="priority" id="priority" className='block text-black bg-gray-200' defaultValue={story.priority} onChange={(e)=>setPriority(e.target.value)}>
             <option value="low">low</option>
             <option value="medium">medium</option>
             <option value="high">high</option>
         </select>
-        <label htmlFor="name">Status:</label>
-        <select name="status" id="status" className='block text-black bg-gray-200' defaultValue={story.status}>
+        <label htmlFor="status">Status:</label>
+        <select name="status" id="status" className='block text-black bg-gray-200' defaultValue={story.status} onChange={(e)=>setStatus(e.target.value)}>
             <option value="todo">todo</option>
             <option value="doing">doing</option>
             <option value="done">done</option>
