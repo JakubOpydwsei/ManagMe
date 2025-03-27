@@ -1,14 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProjectApi, { Project } from '../api/projectApi'
 
 function ProjectEdit() {
     const { projectId } = useParams()
-    const project = ProjectApi.getProjectById(parseInt(projectId!))
-    
-    const [name, setName] = useState(project.name)
-    const [desc, setDesc] = useState(project.desc)
+
+    const [project, setProject] = useState<Project | null>(null);
+    const [name, setName] = useState('')
+    const [desc, setDesc] = useState('')
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchProject = async () => {
+
+            if (!projectId) {
+                return
+            }
+
+            const fetchedProject = await ProjectApi.getProjectById(parseInt(projectId))
+
+            if (!fetchProject) {
+                navigate('/projects');
+                return;
+            }
+
+            setProject(fetchedProject);
+            setName(fetchedProject.name);
+            setDesc(fetchedProject.desc);
+
+        }
+
+        fetchProject()
+
+    }, [navigate, projectId])
 
 
     function editProject() {
@@ -34,9 +58,9 @@ function ProjectEdit() {
         <>
             <p className='mb-4 text-3xl'>Edit project</p>
             <label htmlFor="name">Name:</label>
-            <input defaultValue={project.name} type="text" name="name" id="name" className='block' required onChange={(e) => setName(e.target.value)} />
+            <input defaultValue={name} type="text" name="name" id="name" className='block' required onChange={(e) => setName(e.target.value)} />
             <label htmlFor="desc">Description:</label>
-            <textarea defaultValue={project.desc} name="desc" id="desc" className='block' required onChange={(e) => setDesc(e.target.value)}></textarea>
+            <textarea defaultValue={desc} name="desc" id="desc" className='block' required onChange={(e) => setDesc(e.target.value)}></textarea>
             <button type="button" onClick={editProject}>Edit</button>
         </>
     );

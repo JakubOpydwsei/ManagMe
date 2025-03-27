@@ -1,34 +1,68 @@
-import ProjectApi from '../api/projectApi'
+import ProjectApi, { Project, Story } from '../api/projectApi'
 import { Link, useNavigate } from 'react-router-dom';
 import { Auth } from "../api/Auth";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StoryTile from '../components/StoryTile';
 function StoryListPage() {
 
     const navigate = useNavigate()
     const auth = new Auth()
     const user = auth.GetActiveUser()
-    const activeProject = ProjectApi.getActiveProject()
+    const [activeProject, setActiveProject] = useState<Project | null>(null)
 
-    const [stories, setStories] = useState(ProjectApi.getStoriesByProjectId(activeProject!.id))
+    const [stories, setStories] = useState<Story[] | null>(null)
+
+    useEffect(() => {
+        const fetchActiveProj = async () => {
+
+            const activeProj = await ProjectApi.getActiveProject();
+
+            if (!activeProj) {
+                navigate('/projects');
+                return;
+            }
+            setActiveProject(activeProj);
+        };
+
+        fetchActiveProj();
+    }, [navigate]);
+
+    useEffect(() => {
+        if (!activeProject) {
+            return
+        }
+        const fetchStories = async () => {
+            const stories = await ProjectApi.getStoriesByProjectId(activeProject.id);
+            setStories(stories);
+        };
+        fetchStories();
+    }, [activeProject]);
 
     if (!activeProject) {
         navigate('/projects')
     }
-    
+
     function unactiveProject(): void {
         ProjectApi.unactiveProject()
         navigate('/projects')
     }
 
-    
 
-    function filter() {
+
+    async function filter() {
         const status = document.querySelector('#status') as HTMLSelectElement
         if (status.value === 'none') {
-            return setStories(ProjectApi.getStoriesByProjectId(activeProject!.id))
+            return setStories(await ProjectApi.getStoriesByProjectId(activeProject!.id))
         }
-        setStories(ProjectApi.getStoriesByProjectIdAndStatus(activeProject!.id ,status.value as 'todo' | 'doing' | 'done'))
+        setStories(await ProjectApi.getStoriesByProjectIdAndStatus(activeProject!.id, status.value as 'todo' | 'doing' | 'done'))
+    }
+
+    if (!stories) {
+        return
+    }
+
+    if (!activeProject) {
+        return
     }
 
     return (
@@ -52,7 +86,7 @@ function StoryListPage() {
                     <ul>
                         {stories.map(s => (
                             <StoryTile key={s.id} story={s} />
-                            
+
                         ))}
                     </ul>
                 </div>

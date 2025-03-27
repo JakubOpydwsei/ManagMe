@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProjectApi, { Story } from '../api/projectApi'
 
@@ -8,16 +8,39 @@ function StoryEdit() {
     const { storyId } = useParams()
     const navigate = useNavigate()
 
-    const story = ProjectApi.getStoryById(parseInt(storyId!))
+    // const story = ProjectApi.getStoryById(parseInt(storyId!))
 
-    const [name, setName] = useState(story.name)
-    const [desc, setDesc] = useState(story.desc)
-    const [priority, setPriority] = useState(story.priority)
-    const [status, setStatus] = useState(story.status)
+    const [story, setStory] = useState<Story | null > (null)
+    const [name, setName] = useState('')
+    const [desc, setDesc] = useState('')
+    const [priority, setPriority] = useState('')
+    const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        const fetchProject = async () => {
+            if (!storyId) {
+                return
+            }
+            const story = await ProjectApi.getStoryById(parseInt(storyId))
+            setStory(story)
+
+            if (!story) {
+                return
+            }
+
+            setName(story.name)
+            setDesc(story.desc)
+            setPriority(story.priority)
+            setStatus(story.status)
+        }
+        fetchProject()
+    },[storyId])
 
     function editStory(): void {
 
-
+        if (!story) {
+            return
+        }
 
         const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== '';
 
@@ -41,6 +64,10 @@ function StoryEdit() {
         navigate('/stories')
 
         return;
+    }
+
+    if (!story) {
+        return
     }
 
     return (<><div><p className='mb-4 text-3xl'>Add story</p>
