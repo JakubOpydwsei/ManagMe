@@ -27,6 +27,7 @@ function ProjectListPage() {
     },[])
 
     function unactiveProject(): void {
+        ProjectApi.unactiveProject()
         setActiveProject(null)
         navigate('/projects')
     }
