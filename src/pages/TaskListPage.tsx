@@ -1,42 +1,44 @@
 import { Link, useParams } from "react-router-dom";
-import ProjectApi, {CompleteTask} from "../api/projectApi";
-import { Task } from "../api/projectApi";
 import TaskTile from "../components/TaskTile";
 import { useEffect, useState } from "react";
+import { useApi } from "../contexts/ApiContext";
+import { Task,CompleteTask } from "../types/types";
+
 
 function TaskListPage() {
-
+    const { taskApi } = useApi()
     const { storyId } = useParams() as { storyId: string }
     const [tasks,setTasks] = useState<Task[] | null>(null)
 
     useEffect(() => {
         const fetchTasks = async () =>{
-            const tasks = await ProjectApi.getTasksByStoryId(parseInt(storyId))
+            const tasks = await taskApi.getByStoryId(parseInt(storyId))
             setTasks(tasks)
         }
         fetchTasks()
     },[storyId])
 
     function deleteTask(name: string): void {
-        ProjectApi.deleteTask(name)
+        taskApi.delete(name)
         window.location.reload()
     }
 
     async function markDone(id: number): Promise<void> {
-        const proj = await ProjectApi.getTaskById(id)
-        proj.status = 'done'
-
-        if (!('endDate' in proj)) {
-            (proj as CompleteTask).endDate = new Date().toISOString();
+        const task = await taskApi.getById(id)
+        if (!task) return;
+    
+        task.status = 'done'
+    
+        if (!('endDate' in task)) {
+            (task as CompleteTask).endDate = new Date().toISOString();
         }
-
-        ProjectApi.editTask(proj)
-        // window.location.reload()
-        // chatGPT
+    
+        taskApi.update(task)
         setTasks((prevTasks) => 
-            prevTasks ? prevTasks.map((task) => (task.id === id ? proj : task)) : null
-        );
+            prevTasks ? prevTasks.map((t) => (t.id === id ? task : t)) : []
+        )           
     }
+    
 
     if (!tasks) {
         return

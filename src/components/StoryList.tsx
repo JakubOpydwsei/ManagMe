@@ -1,4 +1,5 @@
-import ProjectApi, { Project, Story } from '../api/projectApi'
+import { useApi } from '../contexts/ApiContext';
+import { Story, Project } from '../types/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -6,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 function StoryList() {
 
     const { user } = useAuth()
+    const { projectApi, storyApi } = useApi()
 
     const navigate = useNavigate()
 
@@ -14,10 +16,10 @@ function StoryList() {
 
     useEffect(() => {
         const fetchActiveProject = async () => {
-            const proj = await ProjectApi.getActiveProject()
+            const proj = await projectApi.getActiveProject()
             if (proj) {
                 setActiveProject(proj)
-                setStories(await ProjectApi.getStoriesByProjectId(proj.id))
+                setStories(await storyApi.getByProjectId(proj.id))
             }
         }
         fetchActiveProject()
@@ -30,20 +32,20 @@ function StoryList() {
     }
 
     function unactiveProject(): void {
-        ProjectApi.unactiveProject()
+        projectApi.unactiveProject()
         navigate('/projects')
     }
 
     async function deleteStory(id: number) {
-        ProjectApi.deleteStory(id)
-        return setStories(await ProjectApi.getStories())
+        storyApi.delete(id)
+        return setStories(await storyApi.getAll())
     }
 
     async function storyChange(status: string) {
         if (status === 'none') {
-            return setStories(await ProjectApi.getStoriesByProjectId(activeProject!.id))
+            return setStories(await storyApi.getByProjectId(activeProject!.id))
         }
-        setStories(await ProjectApi.getStoriesByProjectIdAndStatus(activeProject!.id, status as 'todo' | 'doing' | 'done'))
+        setStories(await storyApi.getByProjectAndStatus(activeProject!.id, status as 'todo' | 'doing' | 'done'))
     }
 
     if (stories === null) {

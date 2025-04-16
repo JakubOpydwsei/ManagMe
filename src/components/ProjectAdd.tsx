@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import ProjectApi, { Project } from '../api/projectApi'
+import { useApi } from '../contexts/ApiContext';
 import { useNavigate } from 'react-router-dom';
+import { Project } from '../types/types';
 
 function ProjectAdd() {
+
     const navigate = useNavigate()
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
+    const { projectApi } = useApi()
 
     const validateForm = () => name.trim() !== '' && desc.trim() !== '';
 
@@ -22,7 +25,7 @@ function ProjectAdd() {
             desc: desc
         }
 
-        ProjectApi.addProject(project)
+        projectApi.add(project)
         navigate('/projects')
     }
 

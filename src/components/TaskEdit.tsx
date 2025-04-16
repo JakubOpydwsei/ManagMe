@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
-import ProjectApi, { Task } from "../api/projectApi"
+import { useApi } from "../contexts/ApiContext";
+import { Task } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "../api/Auth";
 import { useParams } from "react-router-dom";
@@ -17,11 +18,15 @@ function TaskEdit() {
 
     let users = new Auth().getUsers();
     users = users.filter(u => u.role !== "admin");
+    const { taskApi } = useApi();
 
 
     useEffect(() => {
         async function fetchTask() {
-            const fetchedTask = await ProjectApi.getTaskById(parseInt(taskId))
+            const fetchedTask = await taskApi.getById(parseInt(taskId))
+            if (!fetchedTask) {
+                return
+            }
             setTask(fetchedTask)
             setName(fetchedTask.name)
             setDesc(fetchedTask.desc)
@@ -94,7 +99,7 @@ function TaskEdit() {
             };
         }
 
-        ProjectApi.editTask(updatedTask);
+        taskApi.update(updatedTask);
         navigate(`/story/${Id}/tasks`);
     }
 

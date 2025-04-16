@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ProjectApi, { Project } from '../api/projectApi'
+import { useApi } from '../contexts/ApiContext';
+import { Project } from '../types/types';
 
 function ProjectEdit() {
+
     const { projectId } = useParams()
 
     const [project, setProject] = useState<Project | null>(null);
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
+    const { projectApi } = useApi()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -17,11 +20,15 @@ function ProjectEdit() {
                 return
             }
 
-            const fetchedProject = await ProjectApi.getProjectById(parseInt(projectId))
+            const fetchedProject = await projectApi.getById(parseInt(projectId))
 
             if (!fetchProject) {
                 navigate('/projects');
                 return;
+            }
+
+            if (!fetchedProject){
+                return
             }
 
             setProject(fetchedProject);
@@ -32,7 +39,7 @@ function ProjectEdit() {
 
         fetchProject()
 
-    }, [navigate, projectId])
+    }, [navigate, projectApi, projectId])
 
 
     function editProject() {
@@ -50,7 +57,7 @@ function ProjectEdit() {
             desc: desc
         }
 
-        ProjectApi.editProject(newProject)
+        projectApi.update(newProject)
         navigate('/projects')
     }
 

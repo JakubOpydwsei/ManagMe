@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ProjectApi, { Story } from '../api/projectApi'
-
+import { useApi } from '../contexts/ApiContext';
+import { Story } from '../types/types';
 
 function StoryEdit() {
 
     const { storyId } = useParams()
+    const { storyApi } = useApi()
     const navigate = useNavigate()
 
     // const story = ProjectApi.getStoryById(parseInt(storyId!))
@@ -21,8 +22,10 @@ function StoryEdit() {
             if (!storyId) {
                 return
             }
-            const story = await ProjectApi.getStoryById(parseInt(storyId))
-            setStory(story)
+            const story = await storyApi.getById(parseInt(storyId))
+            if (story) {
+                setStory(story)
+            }
 
             if (!story) {
                 return
@@ -60,7 +63,7 @@ function StoryEdit() {
             owner: story.owner
         }
 
-        ProjectApi.editStory(newStory)
+        storyApi.update(newStory)
         navigate('/stories')
 
         return;

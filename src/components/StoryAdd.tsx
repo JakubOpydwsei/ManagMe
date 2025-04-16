@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import ProjectApi from '../api/projectApi'
+import { useApi } from '../contexts/ApiContext';
 import { useNavigate } from 'react-router-dom';
-import { Story } from '../api/projectApi';
-import { Auth } from "../api/Auth";
+import { Story } from '../types/types';
+import { useAuth } from '../contexts/AuthContext';
 
 function StoryAdd() {
 
     const navigate = useNavigate()
-
-    const auth = new Auth()
-    const user = auth.GetActiveUser()
+    const { storyApi, projectApi } = useApi()
+    const { user } = useAuth()
+    
     // const activeProject = ProjectApi.getActiveProject()
 
     const [activeProject, setActiveProject] = useState<{ id: number } | null>(null)  /////////////////////////
@@ -20,7 +20,7 @@ function StoryAdd() {
 
     useEffect(()=>{
         const fetchActiveProject = async () => {
-            const activeProject = await ProjectApi.getActiveProject()
+            const activeProject = await projectApi.getActiveProject()
             setActiveProject(activeProject)
         }
         fetchActiveProject()
@@ -42,10 +42,10 @@ function StoryAdd() {
             project_id: activeProject!.id,
             date: new Date().toISOString(),
             status: status as 'todo' | 'doing' | 'done',
-            owner: user.id
+            owner: user!.id
         }
 
-        ProjectApi.addStory(story)
+        storyApi.add(story)
         navigate('/stories')
     }
 

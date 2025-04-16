@@ -10,6 +10,7 @@ type AuthContextType = {
 }
 
 type User = {
+    id: number
     login: string
     name: string
     surname: string
@@ -101,10 +102,9 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                         localStorage.setItem('token', refreshTokenData.token)
                         localStorage.setItem('refreshToken', refreshTokenData.refreshToken)
 
+                        
                         console.log(`Bearer ${refreshTokenData.refreshToken}`)
                         
-
-
                         const protectedResponse = await fetch(`${API_URL}/protected`, {
                             method: 'GET',
                             headers: { 'Authorization': `Bearer ${refreshTokenData.token}` },

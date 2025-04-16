@@ -1,4 +1,5 @@
-import ProjectApi, {Story} from "../api/projectApi";
+import { useApi } from '../contexts/ApiContext';
+import { Story } from '../types/types';
 import { Link } from 'react-router-dom';
 import { formatDate } from "../utils/formatDate";
 
@@ -7,9 +8,10 @@ type StoryFormProps ={
 }
 
 function StoryTile({story}: StoryFormProps) {
+    const { storyApi } = useApi()
 
     function deleteStory(id: number): void {
-        ProjectApi.deleteStory(id)
+        storyApi.delete(id)
         location.reload(); // do wyrzucenia
 
     }

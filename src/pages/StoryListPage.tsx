@@ -1,4 +1,5 @@
-import ProjectApi, { Project, Story } from '../api/projectApi'
+import { useApi } from '../contexts/ApiContext';
+import { Story,Project } from '../types/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import StoryTile from '../components/StoryTile';
@@ -9,13 +10,13 @@ function StoryListPage() {
     const navigate = useNavigate()
     const { user } = useAuth()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
-
     const [stories, setStories] = useState<Story[] | null>(null)
+    const { projectApi,storyApi } = useApi()
 
     useEffect(() => {
         const fetchActiveProj = async () => {
 
-            const activeProj = await ProjectApi.getActiveProject();
+            const activeProj = await projectApi.getActiveProject();
 
             if (!activeProj) {
                 navigate('/projects');
@@ -32,7 +33,7 @@ function StoryListPage() {
             return
         }
         const fetchStories = async () => {
-            const stories = await ProjectApi.getStoriesByProjectId(activeProject.id);
+            const stories = await storyApi.getByProjectId(activeProject.id);
             setStories(stories);
         };
         fetchStories();
@@ -43,7 +44,7 @@ function StoryListPage() {
     }
 
     function unactiveProject(): void {
-        ProjectApi.unactiveProject()
+        projectApi.unactiveProject()
         navigate('/projects')
     }
 
@@ -52,9 +53,9 @@ function StoryListPage() {
     async function filter() {
         const status = document.querySelector('#status') as HTMLSelectElement
         if (status.value === 'none') {
-            return setStories(await ProjectApi.getStoriesByProjectId(activeProject!.id))
+            return setStories(await storyApi.getByProjectId(activeProject!.id))
         }
-        setStories(await ProjectApi.getStoriesByProjectIdAndStatus(activeProject!.id, status.value as 'todo' | 'doing' | 'done'))
+        setStories(await storyApi.getByProjectAndStatus(activeProject!.id, status.value as 'todo' | 'doing' | 'done'))
     }
 
     if (!stories) {

@@ -1,5 +1,6 @@
-import ProjectApi, { Project } from '../api/projectApi';
+import { useApi } from '../contexts/ApiContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { Project } from '../types/types';
 
 type ProjectFormProps = {
     project: Project;
@@ -8,14 +9,15 @@ type ProjectFormProps = {
 function ProjectTile({ project }: ProjectFormProps) {
 
     const navigate = useNavigate()
+    const { projectApi } = useApi()
 
     function setActiveProject(id: number) {
-        ProjectApi.setActiveProject(id)
+        projectApi.setActiveProject(id)
         navigate('/stories')
     }
 
     function deleteProject(id: number) {
-        ProjectApi.deleteProject(id)
+        projectApi.delete(id)
         navigate('/projects')
     }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import ProjectApi, {Task} from "../api/projectApi"
+import { useApi } from "../contexts/ApiContext";
+import { Task } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "../api/Auth";
 import { useParams } from "react-router-dom";
@@ -8,6 +9,7 @@ function TaskAdd() {
     const { storyId } = useParams() as { storyId: string }
     let users = new Auth().getUsers()
     users = users.filter(u => u.role !== "admin")
+    const { taskApi } = useApi()
     const navigate = useNavigate()
 
     const [name,setName]= useState('')
@@ -55,7 +57,7 @@ function TaskAdd() {
             }
         }
 
-        ProjectApi.addTask(task)
+        taskApi.add(task)
         navigate(`/story/${Id}/tasks`)
         
 

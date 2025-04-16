@@ -1,16 +1,18 @@
 import { Link, useParams } from "react-router-dom";
-import ProjectApi, { Task } from "../api/projectApi";
+import { useApi } from "../contexts/ApiContext";
+import { Task } from "../types/types";
 import TaskTile from "./TaskTile";
 import { useEffect, useState } from "react";
 
 function Kanban() {
-    const { storyId } = useParams() as { storyId: string }
 
+    const { storyId } = useParams() as { storyId: string }
+    const { taskApi } = useApi()
     const [tasks,setTasks] = useState<Task[] | null>(null) 
 
     useEffect(() => {
         const fetchTasks = async () =>{
-            const fetchedTasks = await ProjectApi.getTasksByStoryId(parseInt(storyId))
+            const fetchedTasks = await taskApi.getByStoryId(parseInt(storyId))
             setTasks(fetchedTasks)
         }
         fetchTasks()

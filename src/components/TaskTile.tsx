@@ -1,4 +1,4 @@
-import { Task } from "../api/projectApi";
+import { Task } from "../types/types";
 import { Auth } from "../api/Auth";
 import { formatDate } from "../utils/formatDate";
 
