@@ -9,7 +9,7 @@ type AuthContextType = {
     logout: () => void
 }
 
-type User ={
+type User = {
     login: string
     name: string
     surname: string
@@ -29,7 +29,7 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
     const isAuthenticated = !!token
 
     const login = async (login?: string, password?: string) => {
-        console.log("login start")
+        // console.log("login start")
         const response = await fetch(`${API_URL}/token`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -48,7 +48,7 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
         localStorage.setItem('token', data.token)
         localStorage.setItem('refreshToken', data.refreshToken)
 
-        const protectedResponse = await fetch(`${API_URL}/protected`,{
+        const protectedResponse = await fetch(`${API_URL}/protected`, {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${data.token}` },
         })
@@ -73,24 +73,61 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
         if (storedToken && storedRefresh) {
             setToken(storedToken)
             setRefreshToken(storedRefresh)
+
+            const fetchUserData = async () => {
+                const protectedResponse = await fetch(`${API_URL}/protected`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${storedToken}` },
+                })
+                if (protectedResponse.ok) {
+                    const userData = await protectedResponse.json()
+                    console.log(userData.user)
+                    setUser(userData.user)
+                } else {
+                    console.log("REFRESH TOKEN")
+
+                    console.log(`{"refreshToken": "${storedRefresh}"}`)
+                    const refreshTokenResponse = await fetch(`${API_URL}/refreshToken`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: `{"refreshToken": "${storedRefresh}"}`,
+                    })
+
+                    if (refreshTokenResponse.ok) {
+                        console.log("REFRESH TOKEN OK")
+                        const refreshTokenData = await refreshTokenResponse.json()
+                        setToken(refreshTokenData.token)
+                        setRefreshToken(refreshTokenData.refreshToken)
+                        localStorage.setItem('token', refreshTokenData.token)
+                        localStorage.setItem('refreshToken', refreshTokenData.refreshToken)
+
+                        console.log(`Bearer ${refreshTokenData.refreshToken}`)
+                        
+
+
+                        const protectedResponse = await fetch(`${API_URL}/protected`, {
+                            method: 'GET',
+                            headers: { 'Authorization': `Bearer ${refreshTokenData.token}` },
+                        })
+                        if (protectedResponse.ok) {
+                            const userData = await protectedResponse.json()
+                            console.log(userData.user)
+                            setUser(userData.user)
+                        } else {
+                            console.log("Error fetching user data")
+                        }
+
+                    }
+                }
+            }
+            fetchUserData()
         }
 
-        const fetchUserData = async () => {
-            const protectedResponse= await fetch(`${API_URL}/protected`,{
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${storedToken}` },
-            })
-            if (protectedResponse.ok) {
-                const userData = await protectedResponse.json()
-                // console.log(userData.user)
-                setUser(userData.user)
-            }
-        }
-        fetchUserData()
+
     }, [])
 
     return (<>
-        <AuthContext.Provider value={{ token, refreshToken, isAuthenticated,user, login, logout }}>
+        <AuthContext.Provider value={{ token, refreshToken, isAuthenticated, user, login, logout }}>
             {children}
         </AuthContext.Provider>
     </>);

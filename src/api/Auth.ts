@@ -31,9 +31,9 @@ export class Auth {
     },
     ]
 
-    GetActiveUser() {
-        return this.users[0]
-    }
+    // GetActiveUser() {
+    //     return this.users[0]
+    // }
 
     getUsers() {
         return this.users

@@ -7,7 +7,7 @@ function Profile() {
     if (!isAuthenticated) {
         return <p>Musisz być zalogowany, aby zobaczyć profil.</p>
     }
-    console.log(user)
+    // console.log(user)
 
     return (
         <div>

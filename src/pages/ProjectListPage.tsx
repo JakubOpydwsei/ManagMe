@@ -1,15 +1,14 @@
 import ProjectApi, { Project } from "../api/projectApi";
 import { useNavigate } from 'react-router-dom';
-import { Auth } from "../api/Auth";
 import ProjectTile from "../components/ProjectTile";
 import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProjectListPage() {
 
     const navigate = useNavigate()
-    const auth = new Auth()
-    const user = auth.GetActiveUser()
 
+    const {user} = useAuth()
     const [activeProject,setActiveProject] = useState <Project | null> (null)
     const [projects, setProjects] = useState <Project[] | null> (null)
 
@@ -38,7 +37,8 @@ function ProjectListPage() {
 
     return (
         <>
-        <p className='mb-4 text-3xl'>Logged in as: {user.name} {user.surname}</p>
+        {user && <p className='mb-4 text-3xl'>Logged in as: {user?.name} {user?.surname}</p>}
+        { !user && <p className='mb-4 text-3xl'>Youre not loggined in</p>}
         <hr />
         {activeProject !== null ? (
             <div>
