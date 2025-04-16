@@ -9,7 +9,6 @@ function ProjectListPage() {
     const navigate = useNavigate()
     const auth = new Auth()
     const user = auth.GetActiveUser()
-    // const activeProject = ProjectApi.getActiveProject()
 
     const [activeProject,setActiveProject] = useState <Project | null> (null)
     const [projects, setProjects] = useState <Project[] | null> (null)

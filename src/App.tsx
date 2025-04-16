@@ -13,6 +13,8 @@ import TaskAdd from './components/TaskAdd';
 import TaskEdit from './components/TaskEdit';
 
 import Kanban from './components/Kanban';
+import LoginForm from './components/LoginForm';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -36,6 +38,9 @@ function App() {
 
         {/* Kanban */}
         <Route path="/story/:storyId/kanban" element={<Kanban />} />
+
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
 
