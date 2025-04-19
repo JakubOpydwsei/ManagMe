@@ -26,8 +26,8 @@ export const TaskApi = {
     saveTasks(tasks)
   },
 
-  delete(name: string): void {
-    const tasks = getTasks().filter(t => t.name !== name)
+  delete(id: number): void {
+    const tasks = getTasks().filter(t => t.id !== id)
     saveTasks(tasks)
   },
 

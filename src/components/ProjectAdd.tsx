@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { useApi } from '../contexts/ApiContext';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '../types/types';
+import { useTheme } from '../contexts/ThemeContext';
+import MyButton from './MyButton';
+import MyInput from './MyInput';
 
 function ProjectAdd() {
 
     const navigate = useNavigate()
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
+    const { theme } = useTheme()
     const { projectApi } = useApi()
 
     const validateForm = () => name.trim() !== '' && desc.trim() !== '';
@@ -30,14 +34,12 @@ function ProjectAdd() {
     }
 
     return (
-        <>
+        <div data-bs-theme={theme}>
             <p className='mb-4 text-3xl'>Add project</p>
-            <label htmlFor="name">Name:</label>
-            <input type="text" name="name" id="name" className='block' required onChange={(e) => setName(e.target.value)} />
-            <label htmlFor="desc">Description:</label>
-            <textarea name="desc" id="desc" className='block' required onChange={(e) => setDesc(e.target.value)}></textarea>
-            <button type="button" className='mt-3' onClick={addProject}>Add project</button>
-        </>
+            <MyInput label={'Name:'} value={name} onChange={setName} />
+            <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' />
+            <MyButton text='Add project' onClick={addProject} />
+        </div>
     );
 }
 

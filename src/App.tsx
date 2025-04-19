@@ -17,9 +17,11 @@ import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
 
 import ApiProvider from './contexts/ApiContext';
+import ThemeButton from './components/ThemeButtin';
 function App() {
   return (
     <>
+      <ThemeButton/>
 
       <ApiProvider>
         <Router>
@@ -47,7 +49,6 @@ function App() {
           </Routes>
         </Router>
       </ApiProvider>
-
     </>
   )
 }

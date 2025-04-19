@@ -8,15 +8,15 @@ function Kanban() {
 
     const { storyId } = useParams() as { storyId: string }
     const { taskApi } = useApi()
-    const [tasks,setTasks] = useState<Task[] | null>(null) 
+    const [tasks, setTasks] = useState<Task[] | null>(null)
 
     useEffect(() => {
-        const fetchTasks = async () =>{
+        const fetchTasks = async () => {
             const fetchedTasks = await taskApi.getByStoryId(parseInt(storyId))
             setTasks(fetchedTasks)
         }
         fetchTasks()
-    },[storyId])
+    }, [storyId])
 
     if (!tasks) {
         return
@@ -24,7 +24,7 @@ function Kanban() {
 
     return (
         <>
-            <div className="p-6">
+            <div className="py-4">
                 <Link to={`/story/${storyId}/tasks`}>
                     <button type="button" className="mb-6 px-4 py-2 rounded-xl shadow transition-colors">
                         View Task List
@@ -32,7 +32,7 @@ function Kanban() {
                 </Link>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="rounded-2xl p-4 shadow-sm">
+                    <div className="rounded-2xl py-4">
                         <p className="text-2xl mb-4 text-center font-semibold">To do</p>
                         <div className="flex flex-col gap-3">
                             {tasks
@@ -42,7 +42,7 @@ function Kanban() {
                                 ))}
                         </div>
                     </div>
-                    <div className="rounded-2xl p-4 shadow-sm">
+                    <div className="rounded-2xl py-4">
                         <p className="text-2xl mb-4 text-center font-semibold">Doing</p>
                         <div className="flex flex-col gap-3">
                             {tasks
@@ -52,7 +52,7 @@ function Kanban() {
                                 ))}
                         </div>
                     </div>
-                    <div className="rounded-2xl p-4 shadow-sm">
+                    <div className="rounded-2xl py-4">
                         <p className="text-2xl mb-4 text-center font-semibold">Done</p>
                         <div className="flex flex-col gap-3">
                             {tasks

@@ -2,12 +2,13 @@ import { useApi } from '../contexts/ApiContext';
 import { Story } from '../types/types';
 import { Link } from 'react-router-dom';
 import { formatDate } from "../utils/formatDate";
+import { Button, Card } from 'react-bootstrap';
 
-type StoryFormProps ={
+type StoryFormProps = {
     story: Story
 }
 
-function StoryTile({story}: StoryFormProps) {
+function StoryTile({ story }: StoryFormProps) {
     const { storyApi } = useApi()
 
     function deleteStory(id: number): void {
@@ -17,16 +18,41 @@ function StoryTile({story}: StoryFormProps) {
     }
 
     return (<>
-        <li key={story.id}>
-            <p className="text-2xl">Name: {story.name}</p>
-            <p className="mb-2">Description: {story.desc}</p>
-            <p className="mb-2">Priority: {story.priority}</p>
-            <p className="mb-2">Date: {formatDate(story.date)}</p>
-            <p className="mb-2">Status: {story.status}</p>
-            <p className="mb-2">Owner's ID: {story.owner}</p>
-            <button type="button" onClick={() => deleteStory(story.id)}>Delete</button>
-            <Link to={`/story/edit/${story.id}`}><button type="button">Edit</button></Link>
-            <Link to={`/story/${story.id}/tasks`}> <button type="button">Tasks</button></Link>
+        <li key={story.id} className='mb-4'>
+            <Card className='w-xl pb-3'>
+                <Card.Body className="m-0 p-0">
+                    <Card.Text className="text-3xl pb-2">Name: {story.name}</Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        Description: {story.desc}
+                    </Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        Priority: {story.priority}
+                    </Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        Date: {formatDate(story.date)}
+                    </Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        Status: {story.status}
+                    </Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        Owner ID: {story.owner}
+                    </Card.Text>
+                    <div className='grid grid-cols-2 gap-3'>
+
+                        <Button variant="danger" onClick={() => deleteStory(story.id)}>
+                            Delete
+                        </Button>
+
+                        <Link to={`/story/edit/${story.id}`} className="btn btn-secondary">
+                            Edit
+                        </Link>
+
+                        <Link to={`/story/${story.id}/tasks`} className="btn btn-primary col-span-2">
+                            Tasks
+                        </Link>
+                    </div>
+                </Card.Body>
+            </Card>
         </li></>);
 }
 

@@ -1,33 +1,42 @@
-import { useApi } from '../contexts/ApiContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Project } from '../types/types';
+import { Button, Card } from 'react-bootstrap';
+import { useTheme } from '../contexts/ThemeContext';
 
-type ProjectFormProps = {
-    project: Project;
+type Props = {
+    project: Project
+    onDelete: (id:number) => void
+    onSetActive: (id:number) => void
 }
 
-function ProjectTile({ project }: ProjectFormProps) {
+function ProjectTile({ project, onDelete,onSetActive } : Props) {
 
-    const navigate = useNavigate()
-    const { projectApi } = useApi()
-
-    function setActiveProject(id: number) {
-        projectApi.setActiveProject(id)
-        navigate('/stories')
-    }
-
-    function deleteProject(id: number) {
-        projectApi.delete(id)
-        navigate('/projects')
-    }
+    const {theme} = useTheme()    
 
     return (
-        <li key={project.id} className="mb-4">
-            <p className="text-2xl">{project.name}</p>
-            <p className="mb-2">{project.desc}</p>
-            <button type="button" onClick={() => deleteProject(project.id)}>Delete</button>
-            <Link to={`/project/edit/${project.id}`}><button type="button">Edit</button></Link>
-            <button type="button" onClick={() => setActiveProject(project.id)}>Set as active</button>
+        <li key={project.id} className="mb-4" data-bs-theme={theme}>
+            <Card className='w-xl pb-3'>
+                <Card.Body className="m-0 p-0">
+                    <Card.Text className="text-3xl pb-2">{project.name}</Card.Text>
+                    <Card.Text className='text-xl pb-2'>
+                        {project.desc}
+                    </Card.Text>
+                    <div className='grid grid-cols-2 gap-3'>
+
+                    <Button variant="danger" onClick={() => onDelete(project.id)}>
+                        Delete
+                    </Button>
+
+                    <Link to={`/project/edit/${project.id}`} className="btn btn-secondary">
+                        Edit
+                    </Link>
+
+                    <Button className='col-span-2' variant="primary" onClick={() => onSetActive(project.id)}>
+                        Set as Active
+                    </Button>
+                    </div>
+                </Card.Body>
+            </Card>
         </li>
     );
 }

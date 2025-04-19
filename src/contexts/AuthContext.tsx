@@ -82,7 +82,7 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                 })
                 if (protectedResponse.ok) {
                     const userData = await protectedResponse.json()
-                    console.log(userData.user)
+                    // console.log(userData.user)
                     setUser(userData.user)
                 } else {
                     console.log("REFRESH TOKEN")
@@ -95,7 +95,7 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                     })
 
                     if (refreshTokenResponse.ok) {
-                        console.log("REFRESH TOKEN OK")
+                        // console.log("REFRESH TOKEN OK")
                         const refreshTokenData = await refreshTokenResponse.json()
                         setToken(refreshTokenData.token)
                         setRefreshToken(refreshTokenData.refreshToken)
@@ -111,10 +111,10 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                         })
                         if (protectedResponse.ok) {
                             const userData = await protectedResponse.json()
-                            console.log(userData.user)
+                            // console.log(userData.user)
                             setUser(userData.user)
                         } else {
-                            console.log("Error fetching user data")
+                            // console.log("Error fetching user data")
                         }
 
                     }

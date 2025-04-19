@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useApi } from '../contexts/ApiContext';
 import { Project } from '../types/types';
+import MyButton from '../components/MyButton';
 
 function ProjectListPage() {
 
@@ -26,12 +27,22 @@ function ProjectListPage() {
             setProjects(await projects)
         }
         fetchProjs()
-    },[])
+    },[projectApi])
 
     function unactiveProject(): void {
         projectApi.unactiveProject()
         setActiveProject(null)
         navigate('/projects')
+    }
+
+    async function deleteProject(id: number) {
+        await projectApi.delete(id)
+        setProjects(prev => prev?.filter(p => p.id !== id) || [])
+    }
+
+    function setNewActiveProject(id: number) {
+        projectApi.setActiveProject(id)
+        navigate('/stories')
     }
 
     if (!projects) {
@@ -46,14 +57,14 @@ function ProjectListPage() {
         {activeProject !== null ? (
             <div>
                 <h1>Active project: {activeProject.name}</h1>
-                <button onClick={() => unactiveProject()}>Change active project !</button>
+                <MyButton text='Change active project !' onClick={() => unactiveProject()}/>
             </div>
         ) : (
             <div>
             <p className='mb-4 text-3xl'>List of projects</p>
             <ul>
                 {projects.map(p => (
-                <ProjectTile key={p.id} project={p} />
+                <ProjectTile key={p.id} project={p} onDelete={() => deleteProject(p.id)} onSetActive={() => setNewActiveProject(p.id)}/>
                 ))}
             </ul>
             </div>
