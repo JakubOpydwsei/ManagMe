@@ -3,28 +3,29 @@ import { useApi } from '../contexts/ApiContext';
 import { useNavigate } from 'react-router-dom';
 import { Story } from '../types/types';
 import { useAuth } from '../contexts/AuthContext';
+import { Form } from 'react-bootstrap';
+import MyButton from './MyButton';
+import MyInput from './MyInput';
 
 function StoryAdd() {
 
     const navigate = useNavigate()
     const { storyApi, projectApi } = useApi()
     const { user } = useAuth()
-    
-    // const activeProject = ProjectApi.getActiveProject()
 
-    const [activeProject, setActiveProject] = useState<{ id: number } | null>(null)  /////////////////////////
-    const [name,setName]=useState('')
-    const [desc,setDesc]=useState('')
+    const [activeProject, setActiveProject] = useState<{ id: number } | null>(null)
+    const [name, setName] = useState('')
+    const [desc, setDesc] = useState('')
     const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low');
     const [status, setStatus] = useState<'todo' | 'doing' | 'done'>('todo');
 
-    useEffect(()=>{
+    useEffect(() => {
         const fetchActiveProject = async () => {
             const activeProject = await projectApi.getActiveProject()
             setActiveProject(activeProject)
         }
         fetchActiveProject()
-    },[])
+    }, [])
 
     function addStory() {
         const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== '';
@@ -55,26 +56,41 @@ function StoryAdd() {
 
     return (
         <>
-                <div>
-                    <p className='mb-4 text-3xl'>Add story</p>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" name="name" id="name" className='block' required onChange={(e)=>setName(e.target.value)}/>
-                    <label htmlFor="desc">Description:</label>
-                    <textarea name="desc" id="desc" className='block' required onChange={(e)=>setDesc(e.target.value)}></textarea>
-                    <label htmlFor="priority">Priority:</label>
-                    <select name="priority" id="priority" className='block text-black bg-gray-200' required onChange={(e)=>setPriority(e.target.value as 'low' | 'medium' | 'high')}>
+            <div>
+                <p className='mb-4 text-3xl'>Add story</p>
+                <MyInput label={'Name:'} value={name} onChange={setName} />
+                <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' />
+
+                <Form.Group className="mb-4 m-auto">
+                    <Form.Label htmlFor="priority" className="">Priority:</Form.Label>
+                    <Form.Select
+                        id="priority"
+                        name="priority"
+                        onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}
+                        className="text-center"
+                    >
                         <option value="low">low</option>
                         <option value="medium">medium</option>
                         <option value="high">high</option>
-                    </select>
-                    <label htmlFor="status">Status:</label>
-                    <select name="status" id="status" className='block text-black bg-gray-200' required onChange={(e)=>setStatus(e.target.value as 'todo' | 'doing' | 'done')}>
+                    </Form.Select>
+                </Form.Group>
+
+                <Form.Group className="mb-4 m-auto">
+                    <Form.Label htmlFor="status" className="">Status:</Form.Label>
+                    <Form.Select
+                        id="status"
+                        name="status"
+                        onChange={(e) => setStatus(e.target.value as 'todo' | 'doing' | 'done')}
+                        className="text-center"
+                    >
                         <option value="todo">todo</option>
                         <option value="doing">doing</option>
                         <option value="done">done</option>
-                    </select>
-                    <button type="button" className='mt-3' onClick={addStory}>Add story</button>
-                </div>
+                    </Form.Select>
+                </Form.Group>
+
+                <MyButton text={'Add story'} onClick={addStory} />
+            </div>
         </>
     );
 }

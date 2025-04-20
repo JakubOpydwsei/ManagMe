@@ -4,6 +4,9 @@ import { Task } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "../api/Auth";
 import { useParams } from "react-router-dom";
+import MyInput from "./MyInput";
+import { Form } from "react-bootstrap";
+import MyButton from "./MyButton";
 
 function TaskAdd() {
     const { storyId } = useParams() as { storyId: string }
@@ -12,21 +15,20 @@ function TaskAdd() {
     const { taskApi } = useApi()
     const navigate = useNavigate()
 
-    const [name,setName]= useState('')
-    const [desc,setDesc]= useState('')
-    // const [priority,setPriority]= useState("low") as "low" | "medium" | "high"
+    const [name, setName] = useState('')
+    const [desc, setDesc] = useState('')
     const [priority, setPriority] = useState<"low" | "medium" | "high">("low");
-    const [workingHours,setWorkingHours]= useState('')
-    const [userId,setUserId]= useState('')
+    const [workingHours, setWorkingHours] = useState(0)
+    const [userId, setUserId] = useState('')
 
     function addTask() {
 
-        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && workingHours.trim() !== '';
+        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && workingHours > 0;
 
         const Id = parseInt(storyId)
 
         if (!validateForm()) {
-            alert("Please fill required fields fields")
+            alert("Please correctly fill required fields fields")
             return
         }
 
@@ -37,12 +39,12 @@ function TaskAdd() {
                 name: name,
                 desc: desc,
                 priority: priority,
-                workingHours: parseInt(workingHours),
+                workingHours: workingHours,
                 status: "doing" as 'doing',
                 storyId: Id,
-                addDate: new Date().toISOString(), //?
+                addDate: new Date().toISOString(),
                 user: parseInt(userId),
-                startDate: new Date().toISOString(), //?
+                startDate: new Date().toISOString(),
             }
         } else {
             task = {
@@ -50,48 +52,68 @@ function TaskAdd() {
                 name: name,
                 desc: desc,
                 priority: priority,
-                workingHours: parseInt(workingHours),
+                workingHours: workingHours,
                 status: "todo" as 'todo',
                 storyId: Id,
-                addDate: new Date().toISOString(), //?
+                addDate: new Date().toISOString(),
             }
         }
 
         taskApi.add(task)
         navigate(`/story/${Id}/tasks`)
-        
+
 
     }
 
     return (<>
         <div>
-                    <p className="mb-4 text-3xl">Add Task</p>
+            <p className="mb-4 text-3xl">Add Task</p>
 
-                    <label htmlFor="name">Task"s name:</label>
-                    <input type="text" name="name" id="name" className="block" required onChange={(e) => setName(e.target.value)}/>
-                    
-                    <label htmlFor="desc">Description:</label>
-                    <textarea name="desc" id="desc" className="block" required onChange={(e) => setDesc(e.target.value)}></textarea>
-                    
-                    <label htmlFor="priority">Priority:</label>
-                    <select name="priority" id="priority" className="block text-black bg-gray-200" required onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}>
-                        <option value="low">low</option>
-                        <option value="medium">medium</option>
-                        <option value="high">high</option>
-                    </select>
+            <MyInput label={"Task's name:"} value={name} onChange={setName} />
+            <MyInput label={"Description:"} value={desc} onChange={setDesc} type="textarea" />
 
-                    <label htmlFor="workingHours">Hours require to done task:</label>
-                    <input type="number" max={100} min={1} name="workingHours" id="workingHours" required className="block" onChange={(e) => setWorkingHours(e.target.value)}/>
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label htmlFor="priority" className="">Priority:</Form.Label>
+                <Form.Select
+                    id="priority"
+                    name="priority"
+                    onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}
+                    className="text-center"
+                >
+                    <option value="low">low</option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                </Form.Select>
+            </Form.Group>
 
-                    <label htmlFor="user">Assign user to task:</label>
-                    <select name="user" id="user" className="block text-black bg-gray-200" onChange={(e) => setUserId(e.target.value)}>
-                        <option value=""></option>
-                        {users.map(u => (
-                            <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
-                        ))}
-                    </select>
-                    <button type="button" className="mt-3" onClick={addTask}>Add Task</button>
-                </div>
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label>Hours require to done task:</Form.Label>
+                <Form.Control
+                    type={"number"}
+                    value={workingHours}
+                    onChange={(e) => setWorkingHours(parseInt(e.target.value))}
+                    className="text-center"
+                ></Form.Control>
+            </Form.Group>
+
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label>Assign user to task:</Form.Label>
+                <Form.Select
+                    id="user"
+                    name="user"
+                    onChange={(e) => setUserId(e.target.value)}
+                    className="mb-4 m-auto text-center"
+                >
+                    <option value=""></option>
+                    {users.map(u => (
+                        <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
+
+            <MyButton text={"Add Task"} onClick={addTask} />
+
+        </div>
     </>);
 }
 

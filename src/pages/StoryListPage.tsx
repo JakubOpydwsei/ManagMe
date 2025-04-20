@@ -1,9 +1,11 @@
 import { useApi } from '../contexts/ApiContext';
-import { Story,Project } from '../types/types';
+import { Story, Project } from '../types/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import StoryTile from '../components/StoryTile';
 import { useAuth } from '../contexts/AuthContext';
+import MyButton from '../components/MyButton';
+import { Form } from 'react-bootstrap';
 
 function StoryListPage() {
 
@@ -11,7 +13,7 @@ function StoryListPage() {
     const { user } = useAuth()
     const [activeProject, setActiveProject] = useState<Project | null>(null)
     const [stories, setStories] = useState<Story[] | null>(null)
-    const { projectApi,storyApi } = useApi()
+    const { projectApi, storyApi } = useApi()
 
     useEffect(() => {
         const fetchActiveProj = async () => {
@@ -26,7 +28,7 @@ function StoryListPage() {
         };
 
         fetchActiveProj();
-    }, [navigate]);
+    }, [navigate, projectApi]);
 
     useEffect(() => {
         if (!activeProject) {
@@ -37,25 +39,28 @@ function StoryListPage() {
             setStories(stories);
         };
         fetchStories();
-    }, [activeProject]);
+    }, [activeProject, storyApi]);
 
-    if (!activeProject) {
-        navigate('/projects')
-    }
 
     function unactiveProject(): void {
         projectApi.unactiveProject()
         navigate('/projects')
     }
 
+    function deleteStory(id: number): void {
+        storyApi.delete(id)
+        const stories = storyApi.getByProjectId(activeProject!.id)
+        setStories(stories)
+    }
 
 
-    async function filter() {
+
+    function filter() {
         const status = document.querySelector('#status') as HTMLSelectElement
         if (status.value === 'none') {
-            return setStories(await storyApi.getByProjectId(activeProject!.id))
+            return setStories(storyApi.getByProjectId(activeProject!.id))
         }
-        setStories(await storyApi.getByProjectAndStatus(activeProject!.id, status.value as 'todo' | 'doing' | 'done'))
+        setStories(storyApi.getByProjectAndStatus(activeProject!.id, status.value as 'todo' | 'doing' | 'done'))
     }
 
     if (!stories) {
@@ -74,23 +79,31 @@ function StoryListPage() {
             {activeProject !== null ? (
                 <div>
                     <p className='mb-4 text-3xl'>Active project: {activeProject.name}</p>
-                    <button onClick={() => unactiveProject()}>Change active project !</button>
-                    <Link to={`/story/add`}><button>Add Story</button></Link>
+                    <MyButton text='Change active project !' onClick={() => unactiveProject()} />
+                    <Link to={`/story/add`}><MyButton text='Add Story' /></Link>
                     <hr />
                     <p className='mb-4 text-3xl'>Stories</p>
-                    <label htmlFor="name">Filter by status: </label>
-                    <select name="status" id="status" className='text-white border-1 border-white mb-4' onChange={filter}>
-                        <option value="none" className='text-black'>none</option>
-                        <option value="todo" className='text-black'>todo</option>
-                        <option value="doing" className='text-black'>doing</option>
-                        <option value="done" className='text-black'>done</option>
-                    </select>
-                    <ul>
-                        {stories.map(s => (
-                            <StoryTile key={s.id} story={s} />
 
-                        ))}
-                    </ul>
+                    <Form.Group className="mb-4 m-auto w-2/5">
+                        <Form.Label htmlFor="status" className="">Filter by status:</Form.Label>
+                        <Form.Select
+                            id="status"
+                            name="status"
+                            onChange={filter}
+                            className=""
+                        >
+                            <option value="none">none</option>
+                            <option value="todo">todo</option>
+                            <option value="doing">doing</option>
+                            <option value="done">done</option>
+                        </Form.Select>
+                    </Form.Group>
+
+                    {stories.map(s => (
+                        <StoryTile key={s.id} story={s} onDelete={() => deleteStory(s.id)} />
+
+                    ))}
+
                 </div>
             ) : (
                 <h1>You need to have an active project !</h1>

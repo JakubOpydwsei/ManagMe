@@ -85,9 +85,9 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                     // console.log(userData.user)
                     setUser(userData.user)
                 } else {
-                    console.log("REFRESH TOKEN")
+                    // console.log("REFRESH TOKEN")
 
-                    console.log(`{"refreshToken": "${storedRefresh}"}`)
+                    // console.log(`{"refreshToken": "${storedRefresh}"}`)
                     const refreshTokenResponse = await fetch(`${API_URL}/refreshToken`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -103,7 +103,7 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                         localStorage.setItem('refreshToken', refreshTokenData.refreshToken)
 
                         
-                        console.log(`Bearer ${refreshTokenData.refreshToken}`)
+                        // console.log(`Bearer ${refreshTokenData.refreshToken}`)
                         
                         const protectedResponse = await fetch(`${API_URL}/protected`, {
                             method: 'GET',

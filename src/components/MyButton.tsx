@@ -3,7 +3,7 @@ import { useTheme } from "../contexts/ThemeContext";
 
 type Props = {
     text: string
-    onClick: () => void
+    onClick?: () => void
 }
 
 function MyButton({text, onClick }: Props) {

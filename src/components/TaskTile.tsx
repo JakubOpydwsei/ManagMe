@@ -8,35 +8,32 @@ import { useState } from "react";
 
 type TaskFormProps = {
     task: Task
+    onDelete: () => void
 }
 
-function TaskTile({ task }: TaskFormProps) {
+function TaskTile({ task, onDelete }: TaskFormProps) {
 
     const users = new Auth().getUsers()
     const { taskApi } = useApi()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [tasks, setTasks] = useState<Task[] | null>(null)
 
-    function deleteTask(id: number): void {
-        console.log('reload')
-            taskApi.delete(id)
-            window.location.reload() // wywalić
+    
+
+    async function markDone(task: Task): Promise<void> {
+        if (!task) return;
+
+        task.status = 'done'
+
+        if (!('endDate' in task)) {
+            (task as CompleteTask).endDate = new Date().toISOString();
         }
-    
-        async function markDone(task: Task): Promise<void> {
-            if (!task) return;
-    
-            task.status = 'done'
-    
-            if (!('endDate' in task)) {
-                (task as CompleteTask).endDate = new Date().toISOString();
-            }
-    
-            taskApi.update(task)
-            setTasks((prevTasks) =>
-                prevTasks ? prevTasks.map((t) => (t.id === task.id ? task : t)) : []
-            )
-        }
+
+        taskApi.update(task)
+        setTasks((prevTasks) =>
+            prevTasks ? prevTasks.map((t) => (t.id === task.id ? task : t)) : []
+        )
+    }
 
     return (<>
         <Card className='w-full'>
@@ -80,7 +77,7 @@ function TaskTile({ task }: TaskFormProps) {
                 )}
 
                 <div className="w-full grid grid-cols-2 gap-2 mt-2">
-                    <Button variant="danger" onClick={() => deleteTask(task.id)}>
+                    <Button variant="danger" onClick={onDelete}>
                         Delete
                     </Button>
 

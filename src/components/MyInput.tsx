@@ -12,7 +12,7 @@ type Props = {
 function MyInput({ label, value, onChange, type = 'text', placeholder }: Props) {
     return (
         <Form.Group className="mb-3">
-            <Form.Label>{label}</Form.Label>
+            <Form.Label className="text-center">{label}</Form.Label>
             {type === 'textarea' ? (
                 <Form.Control
                     as="textarea"
@@ -20,6 +20,7 @@ function MyInput({ label, value, onChange, type = 'text', placeholder }: Props) 
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
+                    className="text-center"
                 />
             ) : (
                 <Form.Control
@@ -27,6 +28,7 @@ function MyInput({ label, value, onChange, type = 'text', placeholder }: Props) 
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={placeholder}
+                    className="text-center"
                 />
             )}
         </Form.Group>

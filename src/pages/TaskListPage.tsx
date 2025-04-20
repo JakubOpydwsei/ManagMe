@@ -3,6 +3,7 @@ import TaskTile from "../components/TaskTile";
 import { useEffect, useState } from "react";
 import { useApi } from "../contexts/ApiContext";
 import { Task } from "../types/types";
+import MyButton from "../components/MyButton";
 
 
 function TaskListPage() {
@@ -18,16 +19,22 @@ function TaskListPage() {
         fetchTasks()
     }, [storyId])
 
+    function deleteTask(id: number): void {
+        taskApi.delete(id)
+        const tasks = taskApi.getByStoryId(parseInt(storyId))
+        setTasks(tasks)
+    }
+
     if (!tasks) {
         return
     }
 
     return (<>
-        <Link to={`/story/${storyId}/task/add`}><button>Add new Task</button></Link>
-        <Link to={`/story/${storyId}/kanban`}><button>Kanban</button></Link>
+        <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"}/></Link>
+        <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"}/></Link>
         {tasks.map((task: Task) => (
             <div className="py-2" key={task.id * 10}>
-                <TaskTile key={task.id} task={task} />
+                <TaskTile key={task.id} task={task} onDelete={() => deleteTask(task.id)} />
             </div>
 
         ))}

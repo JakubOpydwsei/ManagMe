@@ -4,6 +4,9 @@ import { Task } from "../types/types";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "../api/Auth";
 import { useParams } from "react-router-dom";
+import MyInput from "./MyInput";
+import { Form } from "react-bootstrap";
+import MyButton from "./MyButton";
 
 function TaskEdit() {
     const { storyId, taskId } = useParams() as { storyId: string, taskId: string };
@@ -108,32 +111,55 @@ function TaskEdit() {
     }
 
     return (
-        <><div>
-            <p className="mb-4 text-3xl">Add Task</p>
-            <label htmlFor="name">Task"s name:</label>
-            <input type="text" name="name" id="name" className="block" required defaultValue={task.name} onChange={(e) => setName(e.target.value)} />
+        <>
+        <div>
+            <p className="mb-4 text-3xl">Edit Task</p>
 
-            <label htmlFor="desc">Description:</label>
-            <textarea name="desc" id="desc" className="block" defaultValue={task.desc} required onChange={(e) => setDesc(e.target.value)}></textarea>
+            <MyInput label={"Task's name:"} value={name} onChange={setName} />
+            <MyInput label={"Description:"} value={desc} onChange={setDesc} type="textarea" />
 
-            <label htmlFor="priority">Priority:</label>
-            <select name="priority" id="priority" className="block text-black bg-gray-200" required defaultValue={task.priority} onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}>
-                <option value="low">low</option>
-                <option value="medium">medium</option>
-                <option value="high">high</option>
-            </select>
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label htmlFor="priority" className="">Priority:</Form.Label>
+                <Form.Select
+                    id="priority"
+                    name="priority"
+                    onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}
+                    className="text-center"
+                    value={priority}
+                >
+                    <option value="low">low</option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                </Form.Select>
+            </Form.Group>
 
-            <label htmlFor="workingHours">Hours require to done task:</label>
-            <input type="number" max={100} min={1} name="workingHours" id="workingHours" required className="block" defaultValue={task.workingHours} onChange={(e) => setWorkingHours(parseInt(e.target.value))} />
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label>Hours require to done task:</Form.Label>
+                <Form.Control
+                    type={"number"}
+                    value={workingHours}
+                    onChange={(e) => setWorkingHours(parseInt(e.target.value))}
+                    className="text-center"
+                ></Form.Control>
+            </Form.Group>
 
-            <label htmlFor="user">Assign user to task:</label>
-            <select name="user" id="user" className="block text-black bg-gray-200" defaultValue={userId} onChange={(e) => setUserId(e.target.value)}>
-                <option value=""></option>
-                {users.map(u => (
-                    <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
-                ))}
-            </select>
-            <button type="button" className="mt-3" onClick={editTask}>Edit Task</button>
+            <Form.Group className="mb-4 m-auto">
+                <Form.Label>Assign user to task:</Form.Label>
+                <Form.Select
+                    id="user"
+                    name="user"
+                    onChange={(e) => setUserId(e.target.value)}
+                    className="mb-4 m-auto text-center"
+                    value={userId}
+                >
+                    <option value=""></option>
+                    {users.map(u => (
+                        <option key={u.id} value={u.id}>{u.name} {u.surname}</option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
+
+            <MyButton text={"Edit Task"} onClick={editTask} />
         </div></>);
 }
 

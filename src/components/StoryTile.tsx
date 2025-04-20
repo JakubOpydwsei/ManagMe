@@ -1,4 +1,3 @@
-import { useApi } from '../contexts/ApiContext';
 import { Story } from '../types/types';
 import { Link } from 'react-router-dom';
 import { formatDate } from "../utils/formatDate";
@@ -6,20 +5,13 @@ import { Button, Card } from 'react-bootstrap';
 
 type StoryFormProps = {
     story: Story
+    onDelete: () => void
 }
 
-function StoryTile({ story }: StoryFormProps) {
-    const { storyApi } = useApi()
-
-    function deleteStory(id: number): void {
-        storyApi.delete(id)
-        location.reload(); // do wyrzucenia
-
-    }
+function StoryTile({ story, onDelete }: StoryFormProps) {
 
     return (<>
-        <li key={story.id} className='mb-4'>
-            <Card className='w-xl pb-3'>
+            <Card key={story.id} className='w-xl mb-4 pb-3'>
                 <Card.Body className="m-0 p-0">
                     <Card.Text className="text-3xl pb-2">Name: {story.name}</Card.Text>
                     <Card.Text className='text-xl pb-2'>
@@ -39,7 +31,7 @@ function StoryTile({ story }: StoryFormProps) {
                     </Card.Text>
                     <div className='grid grid-cols-2 gap-3'>
 
-                        <Button variant="danger" onClick={() => deleteStory(story.id)}>
+                        <Button variant="danger" onClick={onDelete}>
                             Delete
                         </Button>
 
@@ -53,7 +45,7 @@ function StoryTile({ story }: StoryFormProps) {
                     </div>
                 </Card.Body>
             </Card>
-        </li></>);
+        </>);
 }
 
 export default StoryTile;
