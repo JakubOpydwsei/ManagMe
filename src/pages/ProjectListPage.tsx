@@ -36,6 +36,10 @@ function ProjectListPage() {
     }
 
     async function deleteProject(id: number) {
+        if(user?.role === 'guest'){
+            alert("You dont have permision to use this actions")
+            return
+        }
         await projectApi.delete(id)
         const projects = projectApi.getAll()
         setProjects(projects)

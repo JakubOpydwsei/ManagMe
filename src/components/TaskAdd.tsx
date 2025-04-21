@@ -7,12 +7,14 @@ import { useParams } from "react-router-dom";
 import MyInput from "./MyInput";
 import { Form } from "react-bootstrap";
 import MyButton from "./MyButton";
+import { useAuth } from "../contexts/AuthContext";
 
 function TaskAdd() {
     const { storyId } = useParams() as { storyId: string }
     let users = new Auth().getUsers()
     users = users.filter(u => u.role !== "admin")
     const { taskApi } = useApi()
+    const {user} = useAuth()
     const navigate = useNavigate()
 
     const [name, setName] = useState('')
@@ -63,6 +65,10 @@ function TaskAdd() {
         navigate(`/story/${Id}/tasks`)
 
 
+    }
+
+    if (user?.role === 'guest' ) {
+        return (<h1>As a guest you can't use this action</h1>)
     }
 
     return (<>

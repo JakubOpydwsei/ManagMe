@@ -1,11 +1,12 @@
 import { useAuth } from '../contexts/AuthContext'
+import MyButton from './MyButton';
 
 function Profile() {
 
     const { token, refreshToken, isAuthenticated,user, logout } = useAuth()
 
     if (!isAuthenticated) {
-        return <p>Musisz być zalogowany, aby zobaczyć profil.</p>
+        return <p>You need to be loggined in to see your profile.</p>
     }
     // console.log(user)
 
@@ -18,7 +19,7 @@ function Profile() {
             <p><strong>Role:</strong> {user?.role}</p>
             <p><strong>Token:</strong> {token}</p>
             <p><strong>Refresh token:</strong> {refreshToken}</p>
-            <button onClick={logout}>Wyloguj się</button>
+            <MyButton text={'Log out'} onClick={logout}/>
         </div>
     )
 }

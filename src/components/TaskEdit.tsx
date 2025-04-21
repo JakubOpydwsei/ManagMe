@@ -7,10 +7,12 @@ import { useParams } from "react-router-dom";
 import MyInput from "./MyInput";
 import { Form } from "react-bootstrap";
 import MyButton from "./MyButton";
+import { useAuth } from "../contexts/AuthContext";
 
 function TaskEdit() {
     const { storyId, taskId } = useParams() as { storyId: string, taskId: string };
     const Id = parseInt(storyId);
+    const {user} = useAuth()
     const navigate = useNavigate();
     const [task, setTask] = useState<Task | null>(null);
     const [name, setName] = useState("");
@@ -36,7 +38,6 @@ function TaskEdit() {
             setPriority(fetchedTask.priority)
             setWorkingHours(fetchedTask.workingHours)
             if ('user' in fetchedTask && fetchedTask.user) {
-                console.log(fetchedTask)
                 setUserId(fetchedTask.user.toString())
             }
         }
@@ -56,8 +57,6 @@ function TaskEdit() {
             alert("Please fill required fields");
             return;
         }
-
-        console.log(userId)
 
         let updatedTask: Task;
         if (userId) {
@@ -104,6 +103,10 @@ function TaskEdit() {
 
         taskApi.update(updatedTask);
         navigate(`/story/${Id}/tasks`);
+    }
+
+    if (user?.role === 'guest' ) {
+        return (<h1>As a guest you can't use this action</h1>)
     }
 
     if (!task) {

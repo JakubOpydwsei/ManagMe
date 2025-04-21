@@ -48,6 +48,10 @@ function StoryListPage() {
     }
 
     function deleteStory(id: number): void {
+        if(user?.role === 'guest'){
+            alert("You dont have permision to use this actions")
+            return
+        }
         storyApi.delete(id)
         const stories = storyApi.getByProjectId(activeProject!.id)
         setStories(stories)

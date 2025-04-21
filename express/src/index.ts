@@ -9,7 +9,7 @@ type User = {
   password: string
   name: string
   surname: string
-  role: 'admin' | 'devops' | 'developer'
+  role: 'admin' | 'devops' | 'developer' | 'guest'
 }
 
 const users: User[] = [
@@ -23,11 +23,27 @@ const users: User[] = [
   },
   {
     id: 2,
-    login: 'dev',
-    password: 'devpass',
+    login: 'developer',
+    password: 'zaq12wsx',
     name: 'Anna',
     surname: 'Nowak',
     role: 'developer',
+  },
+  {
+    id: 3,
+    login: 'devops',
+    password: 'zaq12wsx',
+    name: 'Adrian',
+    surname: 'Borsuk',
+    role: 'devops',
+  },
+  {
+    id: 4,
+    login: 'guest',
+    password: 'zaq12wsx',
+    name: 'Tralalero',
+    surname: 'Tralala',
+    role: 'guest',
   },
 ]
 
@@ -65,7 +81,7 @@ app.post('/refreshToken', (req: Request, res: Response) => {
 
   const user = refreshTokens[refreshTokenFromPost]
   if (!user) {
-    return res.status(400).send('Invalid refresh token!')
+    return res.status(400).send({message: 'Invalid refresh token!'})
   }
 
   const token = generateToken(60, user)

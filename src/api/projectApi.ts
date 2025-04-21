@@ -43,7 +43,6 @@ export const ProjectApi = {
 
   async setActiveProject(id: number): Promise<void> {
     localStorage.setItem(ACTIVE_PROJECT_KEY, id.toString())
-    console.log("Project with id " + id + " was set as active")
   },
 
   async getActiveProject(): Promise<Project | null> {
@@ -57,6 +56,5 @@ export const ProjectApi = {
 
   async unactiveProject(): Promise<void> {
     localStorage.removeItem(ACTIVE_PROJECT_KEY)
-    console.log("Active project was removed")
   }
 }

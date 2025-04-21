@@ -14,7 +14,7 @@ type User = {
     login: string
     name: string
     surname: string
-    role: 'admin' | 'devops' | 'developer'
+    role: 'admin' | 'devops' | 'developer' | 'guest'
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -81,13 +81,15 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                     headers: { 'Authorization': `Bearer ${storedToken}` },
                 })
                 if (protectedResponse.ok) {
+                    // users token was sucessfull and got data
                     const userData = await protectedResponse.json()
                     // console.log(userData.user)
                     setUser(userData.user)
                 } else {
-                    // console.log("REFRESH TOKEN")
+                    // user token expired and need to refresh
+                    console.log("REFRESH TOKEN")
 
-                    // console.log(`{"refreshToken": "${storedRefresh}"}`)
+                    console.log(`{"refreshToken": "${storedRefresh}"}`)
                     const refreshTokenResponse = await fetch(`${API_URL}/refreshToken`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -95,8 +97,10 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                     })
 
                     if (refreshTokenResponse.ok) {
-                        // console.log("REFRESH TOKEN OK")
+                        // correctly refresh token
+                        console.log("REFRESH TOKEN SUCCESS")
                         const refreshTokenData = await refreshTokenResponse.json()
+                        console.log(refreshTokenData.refreshToken)
                         setToken(refreshTokenData.token)
                         setRefreshToken(refreshTokenData.refreshToken)
                         localStorage.setItem('token', refreshTokenData.token)
@@ -111,20 +115,22 @@ function AuthProvider({ children }: React.PropsWithChildren<object>) {
                         })
                         if (protectedResponse.ok) {
                             const userData = await protectedResponse.json()
+                            console.log("FETCH USER SUCCESS")
                             // console.log(userData.user)
                             setUser(userData.user)
                         } else {
-                            // console.log("Error fetching user data")
+                            console.log("Error fetching user data")
                         }
 
+                    }else{
+                        // fail to refresh token
+                        console.log("REFRESH TOKEN FAIL")
                     }
                 }
             }
             fetchUserData()
         }
-
-
-    }, [])
+    })
 
     return (<>
         <AuthContext.Provider value={{ token, refreshToken, isAuthenticated, user, login, logout }}>

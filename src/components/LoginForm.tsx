@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import MyInput from './MyInput'
+import MyButton from './MyButton'
 // import { useNavigate } from 'react-router-dom'
 
 function LoginForm() {
@@ -11,8 +13,7 @@ function LoginForm() {
     
     // const navigate = useNavigate()
 
-    const loginUser = async (e: React.FormEvent) => {
-        e.preventDefault()
+    async function loginUser() {
         setError(null)
         try {
             await login(loginValue, password)
@@ -20,7 +21,7 @@ function LoginForm() {
             if (err instanceof Error) {
                 setError(err.message)
             } else {
-                setError('Błąd logowania')
+                setError('Login error')
             }
         }
     }
@@ -32,24 +33,14 @@ function LoginForm() {
 
     return (
         <>
-            <label>Login:</label>
-            <input
-                type="text"
-                defaultValue={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
-                className='block'
-                required
-            />
-            <label>Hasło:</label>
-            <input
-                type="password"
-                defaultValue={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className='block'
-                required
-            />
+
+            <MyInput label={'Login:'} value={loginValue} onChange={setLoginValue}/>
+
+            <MyInput label={'Password:'} type='password' value={password} onChange={setPassword}/>
+
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <button type="button" onClick={loginUser}>Zaloguj się</button>
+
+            <MyButton text={'Login'} onClick={loginUser}/>
         </>
     )
 }

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useApi } from "../contexts/ApiContext";
 import { Task } from "../types/types";
 import MyButton from "../components/MyButton";
+import { useAuth } from "../contexts/AuthContext";
 
 
 function TaskListPage() {
     const { taskApi } = useApi()
     const { storyId } = useParams() as { storyId: string }
     const [tasks, setTasks] = useState<Task[] | null>(null)
+    const { user } = useAuth()
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -20,6 +22,10 @@ function TaskListPage() {
     }, [storyId])
 
     function deleteTask(id: number): void {
+        if(user?.role === 'guest'){
+            alert("You dont have permision to use this actions")
+            return
+        }
         taskApi.delete(id)
         const tasks = taskApi.getByStoryId(parseInt(storyId))
         setTasks(tasks)

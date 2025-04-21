@@ -54,6 +54,10 @@ function StoryAdd() {
         return <h1>You have no active project!</h1>;
     }
 
+    if (user?.role === 'guest' ) {
+        return (<h1>As a guest you can't use this action</h1>)
+    }
+
     return (
         <>
             <div>

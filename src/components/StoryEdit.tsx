@@ -5,11 +5,13 @@ import { Story } from '../types/types';
 import MyInput from './MyInput';
 import { Form } from 'react-bootstrap';
 import MyButton from './MyButton';
+import { useAuth } from '../contexts/AuthContext';
 
 function StoryEdit() {
 
     const { storyId } = useParams()
     const { storyApi } = useApi()
+    const {user} = useAuth()
     const navigate = useNavigate()
 
     const [story, setStory] = useState<Story | null>(null)
@@ -72,6 +74,10 @@ function StoryEdit() {
 
     if (!story) {
         return
+    }
+
+    if (user?.role === 'guest' ) {
+        return (<h1>As a guest you can't use this action</h1>)
     }
 
     return (<>

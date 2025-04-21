@@ -5,6 +5,7 @@ import { Project } from '../types/types';
 import { useTheme } from '../contexts/ThemeContext';
 import MyButton from './MyButton';
 import MyInput from './MyInput';
+import { useAuth } from '../contexts/AuthContext';
 
 function ProjectAdd() {
 
@@ -13,6 +14,8 @@ function ProjectAdd() {
     const [desc, setDesc] = useState('')
     const { theme } = useTheme()
     const { projectApi } = useApi()
+
+    const {user} = useAuth()
 
     const validateForm = () => name.trim() !== '' && desc.trim() !== '';
 
@@ -31,6 +34,10 @@ function ProjectAdd() {
 
         projectApi.add(project)
         navigate('/projects')
+    }
+
+    if (user?.role === 'guest' ) {
+        return (<h1>As a guest you can't use this action</h1>)
     }
 
     return (

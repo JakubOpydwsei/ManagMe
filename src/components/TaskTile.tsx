@@ -5,10 +5,11 @@ import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useApi } from "../contexts/ApiContext";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 type TaskFormProps = {
     task: Task
-    onDelete: () => void
+    onDelete?: () => void
 }
 
 function TaskTile({ task, onDelete }: TaskFormProps) {
@@ -17,10 +18,17 @@ function TaskTile({ task, onDelete }: TaskFormProps) {
     const { taskApi } = useApi()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [tasks, setTasks] = useState<Task[] | null>(null)
+    const {user} = useAuth()
 
-    
+
 
     async function markDone(task: Task): Promise<void> {
+
+        if(user?.role === 'guest'){
+            alert("You dont have permision to use this actions")
+            return
+        }
+
         if (!task) return;
 
         task.status = 'done'
@@ -76,7 +84,7 @@ function TaskTile({ task, onDelete }: TaskFormProps) {
                     </Card.Text>
                 )}
 
-                <div className="w-full grid grid-cols-2 gap-2 mt-2">
+                {onDelete && <div className="w-full grid grid-cols-2 gap-2 mt-2">
                     <Button variant="danger" onClick={onDelete}>
                         Delete
                     </Button>
@@ -87,7 +95,18 @@ function TaskTile({ task, onDelete }: TaskFormProps) {
                     {task.status !== 'done' && "user" in task && task.user && <Button className='col-span-2' variant="primary" onClick={() => markDone(task)}>
                         Mark as done
                     </Button>}
-                </div>
+                </div>}
+
+                {!onDelete && <div className="w-full grid grid-cols-1 gap-2 mt-2">
+
+                    <Link to={`/story/${task.storyId}/task/edit/${task.id}`} className="btn btn-secondary">
+                        Edit
+                    </Link>
+                    {task.status !== 'done' && "user" in task && task.user && <Button className='col-span-2' variant="primary" onClick={() => markDone(task)}>
+                        Mark as done
+                    </Button>}
+                </div>}
+
             </Card.Body>
         </Card>
 
