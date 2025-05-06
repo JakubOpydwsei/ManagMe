@@ -1,25 +1,28 @@
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext({
-    theme: 'dark',
-    toggleTheme: () => {}
-})
+  theme: 'dark',
+  toggleTheme: () => {},
+});
 
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
-export function ThemeProvider({children} : {children : ReactNode}) {
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    root.setAttribute('data-bs-theme', theme);
+  }, [theme]);
 
-    const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-    const toggleTheme = () => {
-        setTheme((prev: string) => (prev === 'dark' ? 'light' : 'dark'))
-    }
-
-    return ( <ThemeContext.Provider value={{theme,toggleTheme}}>
-        <div data-bs-theme={theme}>
-            {children}
-        </div>
-    </ThemeContext.Provider> );
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
-export const useTheme = () => useContext(ThemeContext)
+export const useTheme = () => useContext(ThemeContext);

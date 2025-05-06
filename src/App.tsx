@@ -1,5 +1,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import DashboardLayout from './layout/DashboardLayout';
+
 import ProjectListPage from './pages/ProjectListPage';
 import ProjectAdd from './components/ProjectAdd';
 import ProjectEdit from './components/ProjectEdit';
@@ -17,35 +19,40 @@ import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
 
 import ApiProvider from './contexts/ApiContext';
-import ThemeButton from './components/ThemeButtin';
+// import ThemeButton from './components/ThemeButtin';
 function App() {
   return (
     <>
-      <ThemeButton/>
+      {/* <ThemeButton /> */}
 
       <ApiProvider>
         <Router>
           <Routes>
-            {/* Projects */}
-            <Route path="/projects" element={<ProjectListPage />} />
-            <Route path="/project/add" element={<ProjectAdd />} />
-            <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
+            <Route element={<DashboardLayout />}>
 
-            {/* Stories */}
-            <Route path="/stories" element={<StoryListPage />} />
-            <Route path="/story/add" element={<StoryAdd />} />
-            <Route path="/story/edit/:storyId" element={<StoryEdit />} />
+              {/* Projects */}
+              <Route path="/projects" element={<ProjectListPage />} />
+              <Route path="/project/add" element={<ProjectAdd />} />
+              <Route path="/project/edit/:projectId" element={<ProjectEdit />} />
 
-            {/* Tasks */}
-            <Route path="/story/:storyId/tasks" element={<TaskListPage />} />
-            <Route path="/story/:storyId/task/add" element={<TaskAdd />} />
-            <Route path="/story/:storyId/task/edit/:taskId" element={<TaskEdit />} />
+              {/* Stories */}
+              <Route path="/stories" element={<StoryListPage />} />
+              <Route path="/story/add" element={<StoryAdd />} />
+              <Route path="/story/edit/:storyId" element={<StoryEdit />} />
 
-            {/* Kanban */}
-            <Route path="/story/:storyId/kanban" element={<Kanban />} />
+              {/* Tasks */}
+              <Route path="/story/:storyId/tasks" element={<TaskListPage />} />
+              <Route path="/story/:storyId/task/add" element={<TaskAdd />} />
+              <Route path="/story/:storyId/task/edit/:taskId" element={<TaskEdit />} />
+
+              {/* Kanban */}
+              <Route path="/story/:storyId/kanban" element={<Kanban />} />
+
+              <Route path="/profile" element={<Profile />} />
+
+            </Route>
 
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Router>
       </ApiProvider>
