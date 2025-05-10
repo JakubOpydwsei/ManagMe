@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import MyInput from './MyInput'
 import MyButton from './MyButton'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function LoginForm() {
     const { login, isAuthenticated } = useAuth()
@@ -11,7 +11,7 @@ function LoginForm() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
     
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     async function loginUser() {
         setError(null)
@@ -27,8 +27,7 @@ function LoginForm() {
     }
     
     if (isAuthenticated) {
-        return <p>Your logined succesfully</p>
-        // navigate('/profile')
+        navigate('/profile')
     }
 
     return (

@@ -48,7 +48,7 @@ function StoryListPage() {
     }
 
     function deleteStory(id: number): void {
-        if(user?.role === 'guest'){
+        if (user?.role === 'guest') {
             alert("You dont have permision to use this actions")
             return
         }
@@ -88,13 +88,13 @@ function StoryListPage() {
                     <hr />
                     <p className='mb-4 text-3xl'>Stories</p>
 
-                    <Form.Group className="mb-4 m-auto w-2/5">
+                    <Form.Group className="mb-4 m-auto w-2xl md:w-xl lg:max-w-full">
                         <Form.Label htmlFor="status" className="">Filter by status:</Form.Label>
                         <Form.Select
                             id="status"
                             name="status"
                             onChange={filter}
-                            className=""
+                            className="text-center"
                         >
                             <option value="none">none</option>
                             <option value="todo">todo</option>
@@ -104,7 +104,9 @@ function StoryListPage() {
                     </Form.Group>
 
                     {stories.map(s => (
-                        <StoryTile key={s.id} story={s} onDelete={() => deleteStory(s.id)} />
+                        <ul className='m-0 p-0'>
+                            <StoryTile key={s.id} story={s} onDelete={() => deleteStory(s.id)} />
+                        </ul>
 
                     ))}
 

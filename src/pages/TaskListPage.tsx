@@ -22,7 +22,7 @@ function TaskListPage() {
     }, [storyId])
 
     function deleteTask(id: number): void {
-        if(user?.role === 'guest'){
+        if (user?.role === 'guest') {
             alert("You dont have permision to use this actions")
             return
         }
@@ -36,14 +36,14 @@ function TaskListPage() {
     }
 
     return (<>
-        <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"}/></Link>
-        <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"}/></Link>
-        {tasks.map((task: Task) => (
-            <div className="py-2" key={task.id * 10}>
+        <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"} /></Link>
+        <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"} /></Link>
+        <hr/>
+        <ul className='m-0 p-0'>
+            {tasks.map((task: Task) => (
                 <TaskTile key={task.id} task={task} onDelete={() => deleteTask(task.id)} />
-            </div>
-
-        ))}
+            ))}
+        </ul>
     </>);
 }
 

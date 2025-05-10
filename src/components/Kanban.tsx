@@ -3,6 +3,7 @@ import { useApi } from "../contexts/ApiContext";
 import { Task } from "../types/types";
 import TaskTile from "./TaskTile";
 import { useEffect, useState } from "react";
+import MyButton from "./MyButton";
 
 function Kanban() {
 
@@ -26,9 +27,7 @@ function Kanban() {
         <>
             <div className="py-4">
                 <Link to={`/story/${storyId}/tasks`}>
-                    <button type="button" className="mb-6 px-4 py-2 rounded-xl shadow transition-colors">
-                        View Task List
-                    </button>
+                    <MyButton text={"View Task List"} />
                 </Link>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

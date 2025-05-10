@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Project } from '../types/types';
 import { Button, Card } from 'react-bootstrap';
-import { useTheme } from '../contexts/ThemeContext';
 
 type Props = {
     project: Project
@@ -10,18 +9,17 @@ type Props = {
 }
 
 function ProjectTile({ project, onDelete,onSetActive } : Props) {
-
-    const {theme} = useTheme()    
+  
 
     return (
-        <li key={project.id} className="mb-4" data-bs-theme={theme}>
-            <Card className='w-xl pb-3'>
+        <li key={project.id} className="w-full mb-2 flex justify-center items-center">
+            <Card className='w-full md:max-w-xl lg:max-w-2xl pb-3 md:mb-4'>
                 <Card.Body className="m-0 p-0">
                     <Card.Text className="text-3xl pb-2">{project.name}</Card.Text>
                     <Card.Text className='text-xl pb-2'>
                         {project.desc}
                     </Card.Text>
-                    <div className='grid grid-cols-2 gap-3'>
+                    <div className='grid grid-cols-2 gap-2 md:gap-3 lg:gap-4'>
 
                     <Button variant="danger" onClick={() => onDelete(project.id)}>
                         Delete
