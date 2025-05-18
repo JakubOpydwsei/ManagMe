@@ -16,8 +16,8 @@ function StoryAdd() {
     const [activeProject, setActiveProject] = useState<{ id: number } | null>(null)
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
-    const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low');
-    const [status, setStatus] = useState<'todo' | 'doing' | 'done'>('todo');
+    const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('low')
+    const [status, setStatus] = useState<'todo' | 'doing' | 'done'>('todo')
 
     useEffect(() => {
         const fetchActiveProject = async () => {
@@ -25,10 +25,10 @@ function StoryAdd() {
             setActiveProject(activeProject)
         }
         fetchActiveProject()
-    }, [])
+    }, [projectApi])
 
     function addStory() {
-        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== '';
+        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== ''
 
         if (!validateForm()) {
             alert('Please fill in all fields')
@@ -51,7 +51,7 @@ function StoryAdd() {
     }
 
     if (!activeProject) {
-        return <h1>You have no active project!</h1>;
+        return <h1>You have no active project!</h1>
     }
 
     if (user?.role === 'guest' ) {

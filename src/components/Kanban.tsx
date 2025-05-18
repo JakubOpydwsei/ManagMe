@@ -13,11 +13,11 @@ function Kanban() {
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const fetchedTasks = await taskApi.getByStoryId(parseInt(storyId))
+            const fetchedTasks = await taskApi.getByStoryId(storyId)
             setTasks(fetchedTasks)
         }
         fetchTasks()
-    }, [storyId])
+    }, [storyId, taskApi])
 
     if (!tasks) {
         return

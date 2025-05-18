@@ -8,87 +8,77 @@ import MyButton from './MyButton';
 import { useAuth } from '../contexts/AuthContext';
 
 function StoryEdit() {
-
     const { storyId } = useParams()
     const { storyApi } = useApi()
-    const {user} = useAuth()
+    const { user } = useAuth()
     const navigate = useNavigate()
 
     const [story, setStory] = useState<Story | null>(null)
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
-    const [priority, setPriority] = useState('')
-    const [status, setStatus] = useState('')
+    const [priority, setPriority] = useState<"low" | "medium" | "high">("low")
+    const [status, setStatus] = useState<'todo' | 'doing' | 'done'>('todo')
 
     useEffect(() => {
-        const fetchProject = async () => {
-            if (!storyId) {
-                return
-            }
-            const story = await storyApi.getById(parseInt(storyId))
+        const fetchStory = async () => {
+            if (!storyId) return
+            const story = await storyApi.getById(storyId)
             if (story) {
                 setStory(story)
+                setName(story.name)
+                setDesc(story.desc)
+                setPriority(story.priority)
+                setStatus(story.status)
             }
+        };
+        fetchStory()
+    }, [storyId, storyApi])
 
-            if (!story) {
-                return
-            }
+    if (user?.role === 'guest') {
+        return <h1>As a guest you can't use this action</h1>
+    }
 
-            setName(story.name)
-            setDesc(story.desc)
-            setPriority(story.priority)
-            setStatus(story.status)
-        }
-        fetchProject()
-    }, [storyId])
+    if (!story) return <p>Loading story...</p>
 
-    function editStory(): void {
+    async function editStory(): Promise<void> {
+        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== ''
 
-        if (!story) {
+        if (!validateForm()) {
+            alert('Please fill in all fields')
             return
         }
-
-        const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== '';
-
-        if (!validateForm) {
-            alert('Please fill in all fields')
+        if (!story) {
             return
         }
 
         const newStory: Story = {
             id: story.id,
-            name: name,
-            desc: desc,
-            priority: priority as "low" | "medium" | "high",
+            name,
+            desc,
+            priority,
             project_id: story.project_id,
             date: story.date,
-            status: status as 'todo' | 'doing' | 'done',
-            owner: story.owner
+            status,
+            owner: story.owner,
+        };
+
+        try {
+            await storyApi.update(newStory);
+            navigate('/stories');
+        } catch {
+            alert('Failed to update story');
         }
-
-        storyApi.update(newStory)
-        navigate('/stories')
-
-        return;
     }
 
-    if (!story) {
-        return
-    }
-
-    if (user?.role === 'guest' ) {
-        return (<h1>As a guest you can't use this action</h1>)
-    }
-
-    return (<>
+    return (
         <div>
-            <p className='mb-4 text-3xl'>Edit story</p>
+            <p className="mb-4 text-3xl">Edit story</p>
 
             <MyInput label={'Name:'} value={name} onChange={setName} />
-            <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' />
+            <MyInput label={'Description:'} value={desc} onChange={setDesc} type="textarea" />
 
             <Form.Group className="mb-4 m-auto">
-                <Form.Label htmlFor="priority" className="">Priority:</Form.Label>
+                <Form.Label htmlFor="priority">Priority:</Form.Label>
                 <Form.Select
                     id="priority"
                     name="priority"
@@ -103,7 +93,7 @@ function StoryEdit() {
             </Form.Group>
 
             <Form.Group className="mb-4 m-auto">
-                <Form.Label htmlFor="status" className="">Status:</Form.Label>
+                <Form.Label htmlFor="status">Status:</Form.Label>
                 <Form.Select
                     id="status"
                     name="status"
@@ -117,10 +107,9 @@ function StoryEdit() {
                 </Form.Select>
             </Form.Group>
 
-            <MyButton text={'Edit story'} onClick={editStory}/>
-
+            <MyButton text={'Edit story'} onClick={() => editStory()} />
         </div>
-    </>);
+    );
 }
 
 export default StoryEdit;

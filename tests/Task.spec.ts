@@ -49,6 +49,13 @@ test('Task as admin', async ({ page }) => {
   await page.locator('input[type="text"]').fill('Third');
   await page.getByRole('button', { name: 'Edit Task' }).click();
   await page.getByRole('button', { name: 'Delete' }).first().click();
+  await page.getByRole('button', { name: 'Delete' }).first().click();
+  await page.goto('http://localhost:5173/projects');
+  await page.getByRole('button', { name: 'Change active project !' }).click();
+  await page.getByRole('button', { name: 'Set as Active' }).click();
+  await page.getByRole('button', { name: 'Delete' }).click();
+  await page.getByRole('link', { name: 'Projects' }).click();
+  await page.getByRole('button', { name: 'Change active project !' }).click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.close();
 });

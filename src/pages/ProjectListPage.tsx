@@ -17,38 +17,38 @@ function ProjectListPage() {
 
     useEffect(() => {
         const fetchActiveProj = async () => {
-            const activeProj = projectApi.getActiveProject()
-            setActiveProject(await activeProj)
+            const activeProj = await projectApi.getActiveProject()
+            setActiveProject(activeProj)
         }
         fetchActiveProj()
-
+    
         const fetchProjs = async () => {
-            const projects = projectApi.getAll()
-            setProjects(await projects)
+            const projects = await projectApi.getAll()
+            setProjects(projects)
         }
         fetchProjs()
     }, [projectApi])
-
+    
     function unactiveProject(): void {
         projectApi.unactiveProject()
         setActiveProject(null)
         navigate('/projects')
     }
-
+    
     async function deleteProject(id: number) {
-        if(user?.role === 'guest'){
+        if (user?.role === 'guest') {
             alert("You dont have permision to use this actions")
             return
         }
-        await projectApi.delete(id)
-        const projects = projectApi.getAll()
+        await projectApi.delete(id.toString())
+        const projects = await projectApi.getAll()
         setProjects(projects)
     }
-
+    
     function setNewActiveProject(id: number) {
-        projectApi.setActiveProject(id)
+        projectApi.setActiveProject(id.toString())
         navigate('/stories')
-    }
+    }    
 
     if (!projects) {
         return

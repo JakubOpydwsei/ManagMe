@@ -44,5 +44,8 @@ test('Story as admin', async ({ page }) => {
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByLabel('Filter by status:').selectOption('none');
+  await page.goto('http://localhost:5173/projects');
+  await page.getByRole('button', { name: 'Change active project !' }).click();
+  await page.getByRole('button', { name: 'Delete' }).click();
   await page.close();
 });

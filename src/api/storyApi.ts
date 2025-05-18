@@ -1,50 +1,56 @@
 import { Story } from '../types/types'
 
-const STORAGE_KEY = 'stories'
-
-const getStories = (): Story[] => {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  return raw ? JSON.parse(raw) : []
-}
-
-const saveStories = (stories: Story[]) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stories))
-}
+const API_BASE = '/api/stories'
 
 export const StoryApi = {
-  getAll(): Story[] {
-    return getStories()
+  async getAll(): Promise<Story[]> {
+    const res = await fetch(API_BASE)
+    if (!res.ok) throw new Error('Failed to fetch stories')
+    return res.json()
   },
 
-  add(story: Story): void {
-    const stories = getStories()
-    if (stories.find(s => s.name === story.name)) {
-      alert("Story already exists")
-      return
-    }
-    stories.push(story)
-    saveStories(stories)
+  async add(story: Story): Promise<Story> {
+    const res = await fetch(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(story),
+    })
+    if (!res.ok) throw new Error('Failed to add story')
+    return res.json()
   },
 
-  delete(id: number): void {
-    const stories = getStories().filter(s => s.id !== id)
-    saveStories(stories)
+  async delete(id: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' })
+    if (!res.ok) throw new Error('Failed to delete story')
   },
 
-  update(updated: Story): void {
-    const stories = getStories().map(s => s.id === updated.id ? updated : s)
-    saveStories(stories)
+  async update(story: Story): Promise<Story> {
+    if (!story.id) throw new Error('No id to update')
+    const res = await fetch(`${API_BASE}/${story.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(story),
+    })
+    if (!res.ok) throw new Error('Failed to update story')
+    return res.json()
   },
 
-  getById(id: number): Story | undefined {
-    return getStories().find(s => s.id === id)
+  async getById(id: string): Promise<Story | null> {
+    const res = await fetch(`${API_BASE}/${id}`)
+    if (res.status === 404) return null
+    if (!res.ok) throw new Error('Failed to fetch story')
+    return res.json()
   },
 
-  getByProjectId(projectId: number): Story[] {
-    return getStories().filter(s => s.project_id === projectId)
+  async getByProjectId(projectId: string): Promise<Story[]> {
+    const res = await fetch(`${API_BASE}?project_id=${projectId}`)
+    if (!res.ok) throw new Error('Failed to fetch stories by project')
+    return res.json()
   },
 
-  getByProjectAndStatus(projectId: number, status: Story["status"]): Story[] {
-    return getStories().filter(s => s.project_id === projectId && s.status === status)
-  }
+  async getByProjectAndStatus(projectId: string, status: Story['status']): Promise<Story[]> {
+    const res = await fetch(`${API_BASE}?project_id=${projectId}&status=${status}`)
+    if (!res.ok) throw new Error('Failed to fetch filtered stories')
+    return res.json()
+  },
 }

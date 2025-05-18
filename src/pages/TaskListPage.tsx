@@ -6,7 +6,6 @@ import { Task } from "../types/types";
 import MyButton from "../components/MyButton";
 import { useAuth } from "../contexts/AuthContext";
 
-
 function TaskListPage() {
     const { taskApi } = useApi()
     const { storyId } = useParams() as { storyId: string }
@@ -15,36 +14,38 @@ function TaskListPage() {
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const tasks = await taskApi.getByStoryId(parseInt(storyId))
+            const tasks = await taskApi.getByStoryId(storyId)
             setTasks(tasks)
-        }
+        };
         fetchTasks()
-    }, [storyId])
+    }, [storyId, taskApi])
 
-    function deleteTask(id: number): void {
+    async function deleteTask(id: number): Promise<void> {
         if (user?.role === 'guest') {
-            alert("You dont have permision to use this actions")
+            alert("You don't have permission to use this action")
             return
         }
-        taskApi.delete(id)
-        const tasks = taskApi.getByStoryId(parseInt(storyId))
-        setTasks(tasks)
+        await taskApi.delete(String(id))
+        const updatedTasks = await taskApi.getByStoryId(storyId)
+        setTasks(updatedTasks)
     }
 
     if (!tasks) {
-        return
+        return null
     }
 
-    return (<>
-        <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"} /></Link>
-        <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"} /></Link>
-        <hr/>
-        <ul className='m-0 p-0'>
-            {tasks.map((task: Task) => (
-                <TaskTile key={task.id} task={task} onDelete={() => deleteTask(task.id)} />
-            ))}
-        </ul>
-    </>);
+    return (
+        <>
+            <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"} /></Link>
+            <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"} /></Link>
+            <hr/>
+            <ul className='m-0 p-0'>
+                {tasks.map((task: Task) => (
+                    <TaskTile key={task.id} task={task} onDelete={() => deleteTask(task.id)} />
+                ))}
+            </ul>
+        </>
+    );
 }
 
 export default TaskListPage;

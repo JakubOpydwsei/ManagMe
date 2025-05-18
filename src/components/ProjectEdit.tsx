@@ -26,11 +26,10 @@ function ProjectEdit() {
                 return
             }
 
-            const fetchedProject = await projectApi.getById(parseInt(projectId))
+            const fetchedProject = await projectApi.getById(projectId)
 
             if (!fetchProject) {
-                navigate('/projects');
-                return;
+                navigate('/projects')
             }
 
             if (!fetchedProject){

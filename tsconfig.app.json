@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "backend/models", "backend/app.ts", "backend/db.ts", "backend/server.ts"]
 }

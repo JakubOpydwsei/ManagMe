@@ -10,25 +10,25 @@ import MyButton from "./MyButton";
 import { useAuth } from "../contexts/AuthContext";
 
 function TaskEdit() {
-    const { storyId, taskId } = useParams() as { storyId: string, taskId: string };
-    const Id = parseInt(storyId);
+    const { storyId, taskId } = useParams() as { storyId: string, taskId: string }
+    const Id = parseInt(storyId)
     const {user} = useAuth()
-    const navigate = useNavigate();
-    const [task, setTask] = useState<Task | null>(null);
-    const [name, setName] = useState("");
-    const [desc, setDesc] = useState("");
-    const [priority, setPriority] = useState<"low" | "medium" | "high">("low");
-    const [workingHours, setWorkingHours] = useState(0);
-    const [userId, setUserId] = useState<string>('');
+    const navigate = useNavigate()
+    const [task, setTask] = useState<Task | null>(null)
+    const [name, setName] = useState("")
+    const [desc, setDesc] = useState("")
+    const [priority, setPriority] = useState<"low" | "medium" | "high">("low")
+    const [workingHours, setWorkingHours] = useState(0)
+    const [userId, setUserId] = useState<string>('')
 
-    let users = new Auth().getUsers();
-    users = users.filter(u => u.role !== "admin");
-    const { taskApi } = useApi();
+    let users = new Auth().getUsers()
+    users = users.filter(u => u.role !== "admin")
+    const { taskApi } = useApi()
 
 
     useEffect(() => {
         async function fetchTask() {
-            const fetchedTask = await taskApi.getById(parseInt(taskId))
+            const fetchedTask = await taskApi.getById(taskId)
             if (!fetchedTask) {
                 return
             }
@@ -41,20 +41,17 @@ function TaskEdit() {
                 setUserId(fetchedTask.user.toString())
             }
         }
-
+    
         fetchTask()
-
-    }, [taskId]);
-
-
-
+    }, [taskId, taskApi])
+    
 
     function editTask() {
         if (!task) {
             return
         }
         if (!name || !desc || !priority || !workingHours) {
-            alert("Please fill required fields");
+            alert("Please fill required fields")
             return;
         }
 
@@ -101,8 +98,8 @@ function TaskEdit() {
             };
         }
 
-        taskApi.update(updatedTask);
-        navigate(`/story/${Id}/tasks`);
+        taskApi.update(updatedTask)
+        navigate(`/story/${Id}/tasks`)
     }
 
     if (user?.role === 'guest' ) {
@@ -110,7 +107,7 @@ function TaskEdit() {
     }
 
     if (!task) {
-        return <p>Loading...</p>;
+        return <p>Loading...</p>
     }
 
     return (

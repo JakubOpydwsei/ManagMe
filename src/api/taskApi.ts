@@ -1,46 +1,50 @@
-import { Task } from "../types/types"
+import { Task } from '../types/types';
 
-const STORAGE_KEY = 'tasks'
-
-const getTasks = (): Task[] => {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  return raw ? JSON.parse(raw) : []
-}
-
-const saveTasks = (tasks: Task[]) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
-}
+const API_BASE = '/api/tasks'
 
 export const TaskApi = {
-  getAll(): Task[] {
-    return getTasks()
+  async getAll(): Promise<Task[]> {
+    const res = await fetch(API_BASE)
+    if (!res.ok) throw new Error('Failed to fetch tasks')
+    return res.json()
   },
 
-  add(task: Task): void {
-    const tasks = getTasks()
-    if (tasks.find(t => t.name === task.name)) {
-      alert("Task already exists")
-      return
-    }
-    tasks.push(task)
-    saveTasks(tasks)
+  async getByStoryId(storyId: string): Promise<Task[]> {
+    const res = await fetch(`${API_BASE}?storyId=${storyId}`) ////
+    if (!res.ok) throw new Error('Failed to fetch tasks by storyId')
+    return res.json()
   },
 
-  delete(id: number): void {
-    const tasks = getTasks().filter(t => t.id !== id)
-    saveTasks(tasks)
+  async add(task: Task): Promise<Task> {
+    const res = await fetch(API_BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(task),
+    })
+    if (!res.ok) throw new Error('Failed to add task')
+    return res.json()
   },
 
-  update(updated: Task): void {
-    const tasks = getTasks().map(t => t.id === updated.id ? updated : t)
-    saveTasks(tasks)
+  async update(task: Task): Promise<Task> {
+    if (!task.id) throw new Error('No id to update');
+    const res = await fetch(`${API_BASE}/${task.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(task),
+    })
+    if (!res.ok) throw new Error('Failed to update task')
+    return res.json()
   },
 
-  getById(id: number): Task | undefined {
-    return getTasks().find(t => t.id === id)
+  async delete(id: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' })
+    if (!res.ok) throw new Error('Failed to delete task')
   },
 
-  getByStoryId(storyId: number): Task[] {
-    return getTasks().filter(t => t.storyId === storyId)
-  }
-}
+  async getById(id: string): Promise<Task | null> {
+    const res = await fetch(`${API_BASE}/${id}`)
+    if (res.status === 404) { return null }
+    if (!res.ok) throw new Error('Failed to fetch task')
+    return res.json()
+  },
+};
