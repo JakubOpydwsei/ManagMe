@@ -13,7 +13,7 @@ test('Project as admin', async ({ page }) => {
 
   // Add Project
   await page.locator('text=Projects').click();
-  await page.locator('text=Add Project').click();
+  await page.locator('text=Add new project').click();
   await page.fill('input', 'test1');
   await page.fill('textarea', 'test');
   await page.locator('button:has-text("Add project")').click();

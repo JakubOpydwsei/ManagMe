@@ -34,7 +34,7 @@ function DashboardLayout() {
                 <ThemeButton />
                 <ul className='p-0 m-0'>
                     <li><Link to="/projects" className="block py-2"><Button variant={theme} className='w-full'>Projects</Button></Link></li>
-                    <li><Link to="/project/add" className="block py-2"><Button variant={theme} className='w-full'>Add project</Button></Link></li>
+                    <li><Link to="/project/add" className="block py-2"><Button variant={theme} className='w-full'>Add new project</Button></Link></li>
                     <li><Link to="/profile" className="block py-2"><Button variant={theme} className='w-full'>Profile</Button></Link></li>
                     {!isAuthenticated && <li><Link to="/login" className="block py-3"><Button variant={theme} className='w-full'>Login</Button></Link></li>}
                     {isAuthenticated && <li><Button variant={theme} onClick={logout} className='w-full my-2'>Logout</Button></li>}

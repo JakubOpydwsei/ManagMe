@@ -10,7 +10,7 @@ test('Story as admin', async ({ page }) => {
   await page.locator('input[type="password"]').fill('zaq12wsx');
   await page.getByRole('button', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Projects' }).click();
-  await page.getByRole('link', { name: 'Add Project' }).click();
+  await page.getByRole('link', { name: 'Add new project' }).click();
   await page.locator('input[type="text"]').click();
   await page.locator('input[type="text"]').fill('Projectt');
   await page.locator('textarea').click();
@@ -44,7 +44,7 @@ test('Story as admin', async ({ page }) => {
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByLabel('Filter by status:').selectOption('none');
-  await page.goto('http://localhost:5173/projects');
+  await page.getByRole('button', { name: 'Projects' }).click();
   await page.getByRole('button', { name: 'Change active project !' }).click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.close();
