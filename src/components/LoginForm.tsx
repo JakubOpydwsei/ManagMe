@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import MyInput from './MyInput'
 import MyButton from './MyButton'
 import { useNavigate } from 'react-router-dom'
+import GoogleLogin from './GoogleLonig'
 
 function LoginForm() {
     const { login, isAuthenticated } = useAuth()
@@ -40,6 +41,8 @@ function LoginForm() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             <MyButton text={'Login'} onClick={loginUser}/>
+
+            <GoogleLogin />
         </>
     )
 }

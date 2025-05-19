@@ -30,6 +30,7 @@ function App() {
           <Routes>
             <Route element={<DashboardLayout />}>
 
+              <Route path="/" element={<ProjectListPage />} />
               {/* Projects */}
               <Route path="/projects" element={<ProjectListPage />} />
               <Route path="/project/add" element={<ProjectAdd />} />

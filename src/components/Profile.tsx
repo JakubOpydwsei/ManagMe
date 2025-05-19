@@ -3,7 +3,7 @@ import MyButton from './MyButton';
 
 function Profile() {
 
-    const { token, refreshToken, isAuthenticated,user, logout } = useAuth()
+    const {isAuthenticated,user, logout } = useAuth()
 
     if (!isAuthenticated) {
         return <p>You need to be loggined in to see your profile.</p>
@@ -17,8 +17,8 @@ function Profile() {
             <p><strong>Name:</strong> {user?.name}</p>
             <p><strong>Surname:</strong> {user?.surname}</p>
             <p><strong>Role:</strong> {user?.role}</p>
-            <p><strong>Token:</strong> {token}</p>
-            <p><strong>Refresh token:</strong> {refreshToken}</p>
+            {/* <p><strong>Token:</strong> {token}</p> */}
+            {/* <p><strong>Refresh token:</strong> {refreshToken}</p> */}
             <MyButton text={'Log out'} onClick={logout}/>
         </div>
     )
