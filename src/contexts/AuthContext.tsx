@@ -29,7 +29,6 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
 
   const isAuthenticated = !!token
 
-  // Helper do ustawiania stanu i localStorage
   const setAuthState = (newToken: string | null, newRefreshToken: string | null, newUser: User | null) => {
     setToken(newToken)
     setRefreshToken(newRefreshToken)
@@ -42,7 +41,6 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
     else localStorage.removeItem('refreshToken')
   }
 
-  // Standardowe logowanie (login + password)
   const login = async (login?: string, password?: string) => {
     const response = await fetch(`${API_URL}/token`, {
       method: 'POST',
@@ -56,13 +54,11 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
     }
 
     const data = await response.json()
-    // zakładam data: { token, refreshToken }
     const userData = await fetchUserData(data.token)
 
     setAuthState(data.token, data.refreshToken, userData)
   }
 
-  // Logowanie przez Google - dostajesz token Google, wysyłasz do backendu
   const loginGoogle = async (googleToken: string) => {
     const res = await fetch(`${API_URL}/google-login`, {
       method: 'POST',
@@ -76,13 +72,12 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
     }
 
     const data = await res.json()
-    // backend zwraca tylko token, refreshToken jest null
+
     const userData = await fetchUserData(data.token)
 
     setAuthState(data.token, null, userData)
   }
 
-  // Pobranie danych użytkownika po tokenie JWT
   const fetchUserData = async (jwtToken: string): Promise<User> => {
     const protectedResponse = await fetch(`${API_URL}/protected`, {
       method: 'GET',
@@ -97,65 +92,73 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
     return json.user
   }
 
-  // Wylogowanie
   const logout = () => {
     setAuthState(null, null, null)
   }
 
-  // Przy starcie aplikacji sprawdzamy localStorage i próbujemy wczytać usera (w tym obsługa odświeżania tokena)
   useEffect(() => {
     const storedToken = localStorage.getItem('token')
     const storedRefresh = localStorage.getItem('refreshToken')
-
     if (storedToken && storedRefresh) {
-      // Ustaw tokeny w stanie tymczasowo
       setToken(storedToken)
       setRefreshToken(storedRefresh)
 
-      const fetchUser = async () => {
-        // Spróbuj pobrać usera po tokenie
-        const res = await fetch(`${API_URL}/protected`, {
-          headers: { Authorization: `Bearer ${storedToken}` },
+      const fetchUserData = async () => {
+        const protectedResponse = await fetch(`${API_URL}/protected`, {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${storedToken}` },
         })
-
-        if (res.ok) {
-          const data = await res.json()
-          setUser(data.user)
+        if (protectedResponse.ok) {
+          // users token was sucessfull and got data
+          const userData = await protectedResponse.json()
+          // console.log(userData.user)
+          setUser(userData.user)
         } else {
-          // Jeśli token wygasł, spróbuj odświeżyć
-          const refreshRes = await fetch(`${API_URL}/refreshToken`, {
+          // user token expired and need to refresh
+          console.log("REFRESH TOKEN")
+
+          console.log(`{"refreshToken": "${storedRefresh}"}`)
+          const refreshTokenResponse = await fetch(`${API_URL}/refreshToken`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken: storedRefresh }),
+            body: `{"refreshToken": "${storedRefresh}"}`,
           })
 
-          if (refreshRes.ok) {
-            const refreshData = await refreshRes.json()
-            setToken(refreshData.token)
-            setRefreshToken(refreshData.refreshToken)
-            localStorage.setItem('token', refreshData.token)
-            localStorage.setItem('refreshToken', refreshData.refreshToken)
+          if (refreshTokenResponse.ok) {
+            // correctly refresh token
+            console.log("REFRESH TOKEN SUCCESS")
+            const refreshTokenData = await refreshTokenResponse.json()
+            console.log(refreshTokenData.refreshToken)
+            setToken(refreshTokenData.token)
+            setRefreshToken(refreshTokenData.refreshToken)
+            localStorage.setItem('token', refreshTokenData.token)
+            localStorage.setItem('refreshToken', refreshTokenData.refreshToken)
 
-            // Pobierz usera na nowo po odświeżonym tokenie
-            const protectedRes = await fetch(`${API_URL}/protected`, {
-              headers: { Authorization: `Bearer ${refreshData.token}` },
+
+            // console.log(`Bearer ${refreshTokenData.refreshToken}`)
+
+            const protectedResponse = await fetch(`${API_URL}/protected`, {
+              method: 'GET',
+              headers: { 'Authorization': `Bearer ${refreshTokenData.token}` },
             })
-
-            if (protectedRes.ok) {
-              const userData = await protectedRes.json()
+            if (protectedResponse.ok) {
+              const userData = await protectedResponse.json()
+              console.log("FETCH USER SUCCESS")
+              // console.log(userData.user)
               setUser(userData.user)
             } else {
-              logout()
+              console.log("Error fetching user data")
             }
+
           } else {
-            logout()
+            // fail to refresh token
+            console.log("REFRESH TOKEN FAIL")
           }
         }
       }
-
-      fetchUser()
+      fetchUserData()
     }
-  }, [])
+  })
 
   return (
     <AuthContext.Provider value={{ token, refreshToken, isAuthenticated, user, login, logout, loginGoogle }}>
