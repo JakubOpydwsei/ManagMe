@@ -50,6 +50,10 @@ function ProjectListPage() {
         navigate('/stories')
     }    
 
+    if(activeProject){
+        navigate('/stories')
+    }
+
     if (!projects) {
         return
     }
