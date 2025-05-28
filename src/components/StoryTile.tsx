@@ -2,6 +2,7 @@ import { Story } from '../types/types';
 import { Link } from 'react-router-dom';
 import { formatDate } from "../utils/formatDate";
 import { Button, Card } from 'react-bootstrap';
+import { Auth } from '../api/Auth';
 
 type StoryFormProps = {
     story: Story
@@ -9,6 +10,8 @@ type StoryFormProps = {
 }
 
 function StoryTile({ story, onDelete }: StoryFormProps) {
+
+    const users = new Auth().getUsers()
 
     return (<>
             <li key={story.id} className="w-full mb-2 flex justify-center items-center">
@@ -28,7 +31,7 @@ function StoryTile({ story, onDelete }: StoryFormProps) {
                         Status: {story.status}
                     </Card.Text>
                     <Card.Text className='text-xl pb-2'>
-                        Owner ID: {story.owner}
+                        Owner: {users.find(u => u.id === story.owner)?.surname} {users.find(u => u.id === story.owner)?.name}
                     </Card.Text>
                     <div className='grid grid-cols-2 gap-2 md:gap-3 lg:gap-4'>
 
