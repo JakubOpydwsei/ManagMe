@@ -32,7 +32,7 @@ function LoginForm() {
     }
 
     return (
-        <>
+        <div className='w-8/12 md:w-3/4 lg:w-2/4 m-auto'>
 
             <MyInput label={'Login:'} value={loginValue} onChange={setLoginValue}/>
 
@@ -43,7 +43,7 @@ function LoginForm() {
             <MyButton text={'Login'} onClick={loginUser}/>
 
             <GoogleLogin />
-        </>
+        </div>
     )
 }
 
