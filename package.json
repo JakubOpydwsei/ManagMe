@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:all": "concurrently \"npm run dev\" \"cd backend && npm start\" \"cd express && npm run dev\""
+    "start:all": "concurrently \"npm run dev\" \"cd backend && npm start\" \"cd express && npm run dev\"",
+    "install:all": "npm install && cd backend && npm install && cd ../express && npm install"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
