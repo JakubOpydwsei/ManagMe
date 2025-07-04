@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 test('Task as admin', async ({ page }) => {
-  await page.goto('http://localhost:5173/login');
+  await page.goto('http://localhost:4173/login');
   await page.locator('input[type="text"]').click();
   await page.locator('input[type="text"]').fill('admin');
   await page.locator('input[type="password"]').click();

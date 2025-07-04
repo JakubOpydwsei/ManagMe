@@ -16,8 +16,7 @@ function TaskTile({ task, onDelete }: TaskFormProps) {
 
     const users = new Auth().getUsers()
     const { taskApi } = useApi()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [tasks, setTasks] = useState<Task[] | null>(null)
+    const [, setTasks] = useState<Task[] | null>(null)
     const { user } = useAuth()
 
 
