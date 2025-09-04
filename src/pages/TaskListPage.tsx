@@ -30,8 +30,18 @@ function TaskListPage() {
         setTasks(updatedTasks)
     }
 
-    if (!tasks || !tasks.length) {
+    if (!tasks) {
         return <h1>No Task aviable</h1>
+    }
+
+    if (!tasks.length) {
+        return (
+            <>
+                <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"} /></Link>
+                <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"} /></Link>
+                <h1>No Task aviable</h1>
+            </>
+        )
     }
 
     return (
@@ -39,7 +49,7 @@ function TaskListPage() {
             <Link to={`/story/${storyId}/task/add`}><MyButton text={"Add new Task"} /></Link>
             <Link to={`/story/${storyId}/kanban`}><MyButton text={"Kanban"} /></Link>
             <h1>Tasks:</h1>
-            <hr/>
+            <hr />
             <ul className='m-0 p-0'>
                 {tasks.map((task: Task) => (
                     <TaskTile key={task.id} task={task} onDelete={() => deleteTask(task.id)} />
