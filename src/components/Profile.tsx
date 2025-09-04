@@ -12,7 +12,7 @@ function Profile() {
 
     return (
         <div>
-            <h2>Twój profil</h2>
+            <h1>Twój profil</h1>
             <p><strong>Login:</strong> {user?.login}</p>
             <p><strong>Name:</strong> {user?.name}</p>
             <p><strong>Surname:</strong> {user?.surname}</p>

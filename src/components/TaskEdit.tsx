@@ -107,13 +107,13 @@ function TaskEdit() {
     }
 
     if (!task) {
-        return <p>Loading...</p>
+        return <h1>Loading...</h1>
     }
 
     return (
         <>
         <div>
-            <p className="mb-4 text-3xl">Edit Task</p>
+            <h1 className="mb-4 text-3xl">Edit Task</h1>
 
             <MyInput label={"Task's name:"} value={name} onChange={setName} />
             <MyInput label={"Description:"} value={desc} onChange={setDesc} type="textarea" />

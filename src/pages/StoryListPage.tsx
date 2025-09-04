@@ -77,7 +77,7 @@ function StoryListPage() {
             )}
             <hr />
             <div>
-                <p className='mb-4 text-3xl'>Active project: {activeProject.name}</p>
+                <h1 className='mb-4 text-3xl'>Active project: {activeProject.name}</h1>
                 <MyButton text='Change active project !' onClick={() => unactiveProject()} />
                 <Link to={`/story/add`}><MyButton text='Add Story' /></Link>
                 <hr />

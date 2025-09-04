@@ -25,6 +25,7 @@ function Kanban() {
 
     return (
         <>
+            <h1>Kanban  </h1>
             <div className="py-4">
                 <Link to={`/story/${storyId}/tasks`}>
                     <MyButton text={"View Task List"} />
@@ -34,11 +35,13 @@ function Kanban() {
                     <div className="rounded-2xl py-4">
                         <p className="text-2xl mb-4 text-center font-semibold">To do</p>
                         <div className="flex flex-col gap-3">
-                            {tasks
+                            <ul className='m-0 p-0'>
+                                {tasks
                                 .filter(task => task.status === "todo")
                                 .map(task => (
                                     <TaskTile key={task.id} task={task} />
                                 ))}
+                            </ul>
                         </div>
                     </div>
                     <div className="rounded-2xl py-4">

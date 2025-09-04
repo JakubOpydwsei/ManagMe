@@ -11,7 +11,7 @@ function LoginForm() {
     const [loginValue, setLoginValue] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
-    
+
     const navigate = useNavigate()
 
     async function loginUser() {
@@ -26,24 +26,27 @@ function LoginForm() {
             }
         }
     }
-    
+
     if (isAuthenticated) {
         navigate('/profile')
     }
 
     return (
-        <div className='w-8/12 md:w-3/4 lg:w-2/4 m-auto'>
+        <main>
+            <div className='w-8/12 md:w-3/4 lg:w-2/4 m-auto'>
+                <h1>Login with existing account</h1>
 
-            <MyInput label={'Login:'} value={loginValue} onChange={setLoginValue}/>
+                <MyInput label={'Login:'} value={loginValue} onChange={setLoginValue} />
 
-            <MyInput label={'Password:'} type='password' value={password} onChange={setPassword}/>
+                <MyInput label={'Password:'} type='password' value={password} onChange={setPassword} />
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <MyButton text={'Login'} onClick={loginUser}/>
+                <MyButton text={'Login'} onClick={loginUser} />
 
-            <GoogleLogin />
-        </div>
+                <GoogleLogin />
+            </div>
+        </main>
     )
 }
 

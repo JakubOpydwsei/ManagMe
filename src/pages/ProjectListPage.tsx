@@ -70,7 +70,7 @@ function ProjectListPage() {
                 </div>
             ) : (
                 <div>
-                    <p className='mb-4 text-3xl'>List of projects</p>
+                    <h1 className='mb-4 text-3xl'>List of projects</h1>
                     <ul className='m-0 p-0'>
                         {projects.map(p => (
                             <ProjectTile key={p.id} project={p} onDelete={() => deleteProject(p.id)} onSetActive={() => setNewActiveProject(p.id)} />

@@ -42,7 +42,7 @@ function ProjectAdd() {
 
     return (
         <div data-bs-theme={theme}>
-            <p className='mb-4 text-3xl'>Add project</p>
+            <h1 className='mb-4 text-3xl'>Add project</h1>
             <MyInput label={'Name:'} value={name} onChange={setName} />
             <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' />
             <MyButton text='Add project' onClick={addProject} />

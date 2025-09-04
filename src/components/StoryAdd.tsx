@@ -61,7 +61,7 @@ function StoryAdd() {
     return (
         <>
             <div>
-                <p className='mb-4 text-3xl'>Add story</p>
+                <h1 className='mb-4 text-3xl'>Add story</h1>
                 <MyInput label={'Name:'} value={name} onChange={setName} />
                 <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' />
 

@@ -72,7 +72,7 @@ function ProjectEdit() {
 
     return (
         <div data-bs-theme={theme}>
-            <p className='mb-4 text-3xl'>Edit project</p>
+            <h1 className='mb-4 text-3xl'>Edit project</h1>
             <MyInput label={'Name:'} value={name} onChange={setName} />
             <MyInput label={'Description:'} value={desc} onChange={setDesc} type='textarea' /><MyButton text='Edit' onClick={editProject}/>
         </div>

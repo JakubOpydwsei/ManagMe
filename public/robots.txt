@@ -1,0 +1,6 @@
+# Zezwalaj na wszystko
+User-agent: *
+Disallow:
+
+# Lub ogranicz dostęp do niektórych folderów
+# Disallow: /private/

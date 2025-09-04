@@ -169,6 +169,20 @@ npx playwright test
 
 ---
 
+## Accessibility & SEO
+
+This project was tested using **Axe DevTools** and **Google Lighthouse** to ensure high standards of accessibility and SEO:
+
+- **WCAG 2.1 AA compliance:** 100%
+- **Accessibility score (Lighthouse):** 100%
+- **SEO score (Lighthouse):** 100%
+- **Best Practices score (Lighthouse):** 78  
+  *Note:* The lower Best Practices score is due to using **Google OAuth for authentication**, which uses third-party cookies. This is an expected limitation and does not affect the functionality or security of the application.
+
+![Axe tests](./screenshots/axe.png)
+![Lighthouse tests](./screenshots/lighthouse.png)
+---
+
 ## 📸 Screenshots
 
 ![Login Form](./screenshots/login-form.png)  

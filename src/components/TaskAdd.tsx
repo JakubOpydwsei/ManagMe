@@ -14,7 +14,7 @@ function TaskAdd() {
     let users = new Auth().getUsers()
     users = users.filter(u => u.role !== "admin")
     const { taskApi } = useApi()
-    const {user} = useAuth()
+    const { user } = useAuth()
     const navigate = useNavigate()
 
     const [name, setName] = useState('')
@@ -67,13 +67,13 @@ function TaskAdd() {
 
     }
 
-    if (user?.role === 'guest' ) {
+    if (user?.role === 'guest') {
         return (<h1>As a guest you can't use this action</h1>)
     }
 
     return (<>
         <div>
-            <p className="mb-4 text-3xl">Add Task</p>
+            <h1 className="mb-4 text-3xl">Add Task</h1>
 
             <MyInput label={"Task's name:"} value={name} onChange={setName} />
             <MyInput label={"Description:"} value={desc} onChange={setDesc} type="textarea" />
@@ -93,8 +93,9 @@ function TaskAdd() {
             </Form.Group>
 
             <Form.Group className="mb-4 m-auto">
-                <Form.Label>Hours require to done task:</Form.Label>
+                <Form.Label htmlFor="hours">Hours require to done task:</Form.Label>
                 <Form.Control
+                    id="hours"
                     type={"number"}
                     value={workingHours}
                     onChange={(e) => setWorkingHours(parseInt(e.target.value))}
@@ -103,7 +104,7 @@ function TaskAdd() {
             </Form.Group>
 
             <Form.Group className="mb-4 m-auto">
-                <Form.Label>Assign user to task:</Form.Label>
+                <Form.Label htmlFor="user">Assign user to task:</Form.Label>
                 <Form.Select
                     id="user"
                     name="user"

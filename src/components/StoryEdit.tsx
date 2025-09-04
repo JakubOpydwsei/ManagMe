@@ -38,7 +38,7 @@ function StoryEdit() {
         return <h1>As a guest you can't use this action</h1>
     }
 
-    if (!story) return <p>Loading story...</p>
+    if (!story) return <h1>Loading story...</h1>
 
     async function editStory(): Promise<void> {
         const validateForm = () => name.trim() !== '' && desc.trim() !== '' && priority.trim() !== '' && status.trim() !== ''
@@ -72,7 +72,7 @@ function StoryEdit() {
 
     return (
         <div>
-            <p className="mb-4 text-3xl">Edit story</p>
+            <h1 className="mb-4 text-3xl">Edit story</h1>
 
             <MyInput label={'Name:'} value={name} onChange={setName} />
             <MyInput label={'Description:'} value={desc} onChange={setDesc} type="textarea" />
