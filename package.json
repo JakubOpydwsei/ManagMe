@@ -14,7 +14,8 @@
     "start:ci": "npm run build && concurrently \"npm run preview\" \"cd backend && npm start\" \"cd express && npm run dev\"",
     "test:ci": "start-server-and-test start:ci http://localhost:4173 'npx playwright test'",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.9",
@@ -43,6 +44,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/ui": "^3.2.4",
     "concurrently": "^9.1.2",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
