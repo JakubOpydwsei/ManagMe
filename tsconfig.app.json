@@ -29,6 +29,7 @@
     "backend/models",
     "backend/app.ts",
     "backend/db.ts",
-    "backend/server.ts"
+    "backend/server.ts",
+    "tests"
   ]
 }
