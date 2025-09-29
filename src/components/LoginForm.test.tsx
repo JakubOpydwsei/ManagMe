@@ -12,12 +12,17 @@ describe("LoginForm UI", () => {
   it("renders inputs", () => {
     render(<LoginForm />);
 
-    expect(
-      screen.getByText(/Login with existing account/i)
-    ).toBeInTheDocument();
     expect(screen.getByLabelText(/Login:/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Password:/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Login/i })).toBeInTheDocument();
+  });
+
+  it("renders information text", () => {
+    render(<LoginForm />);
+
+    expect(
+      screen.getByText(/Login with existing account/i)
+    ).toBeInTheDocument();
   });
 });
 
