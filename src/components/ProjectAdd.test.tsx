@@ -36,4 +36,55 @@ describe("ProjectAdd component tests", () => {
       "test Description"
     );
   });
+
+  it("prompt alert when form name and description inputs are empty", async () => {
+    render(<ProjectAdd />);
+    const user = userEvent.setup();
+    const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    await user.click(screen.getByRole("button", { name: /Add project/i }));
+    expect(alertMock).toBeCalledWith("Please fill in all fields");
+
+    alertMock.mockRestore();
+  });
+
+  it("prompt alert when form name input is empty", async () => {
+    render(<ProjectAdd />);
+    const user = userEvent.setup();
+    const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    await user.type(screen.getByLabelText("Description:"), "test Description");
+
+    await user.click(screen.getByRole("button", { name: /Add project/i }));
+    expect(alertMock).toBeCalledWith("Please fill in all fields");
+
+    alertMock.mockRestore();
+  });
+
+  it("prompt alert when form description input is empty", async () => {
+    render(<ProjectAdd />);
+    const user = userEvent.setup();
+    const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    await user.type(screen.getByLabelText("Name:"), "test Name");
+
+    await user.click(screen.getByRole("button", { name: /Add project/i }));
+    expect(alertMock).toBeCalledWith("Please fill in all fields");
+
+    alertMock.mockRestore();
+  });
+
+  it("do not prompt alert when form is filled", async () => {
+    render(<ProjectAdd />);
+    const user = userEvent.setup();
+    const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+    await user.type(screen.getByLabelText("Name:"), "test Name");
+    await user.type(screen.getByLabelText("Description:"), "test Description");
+
+    await user.click(screen.getByRole("button", { name: /Add project/i }));
+    expect(alertMock).not.toHaveBeenCalled();
+
+    alertMock.mockRestore();
+  });
 });
